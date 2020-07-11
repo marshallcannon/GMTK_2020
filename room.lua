@@ -9,9 +9,11 @@ local Room = Class {
   height = 320
 }
 
-function Room:init (roomMap)
+function Room:init (roomMap, x, y)
 
   self.roomMap = roomMap
+  self.x = x
+  self.y = y
 
   self.bumpWorld = Bump.newWorld()
   self.objects = {}
@@ -152,8 +154,6 @@ end
 
 function Room:draw (x, y)
 
-  love.graphics.translate(x, y)
-
   for i = 1, #self.objects do
     self.objects[i]:draw()
   end
@@ -166,8 +166,6 @@ function Room:draw (x, y)
     love.graphics.setColor(1, 1, 1)
     love.graphics.print(self.pausedText.text, self.pausedText.x, self.pausedText.y)
   end
-
-  love.graphics.translate(-x, -y)
 
 end
 
