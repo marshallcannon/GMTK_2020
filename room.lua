@@ -11,11 +11,14 @@ local Room = Class {
   height = 320
 }
 
-function Room:init (roomMap, x, y)
+function Room:init (scene, roomMap, x, y, gridX, gridY)
 
+  self.scene = scene
   self.roomMap = roomMap
   self.x = x
   self.y = y
+  self.gridX = gridX
+  self.gridY = gridY
 
   self.bumpWorld = Bump.newWorld()
   self.objects = {}
@@ -30,11 +33,10 @@ function Room:init (roomMap, x, y)
 
   self.timeline = Timeline(self.maxTime)
 
-  self.pausedText = love.graphics.newText(Fonts.verminVibes, 'Complete prior room')
-  self.textVisible = true
-
-  -- locked, active, complete
+  -- locked, unlocked, complete
   self.status = 'locked'
+  self.overlayText = love.graphics.newText(Fonts.verminVibes, '')
+  self:lockRoom()
 
   self.lockedMovement = false
   self.lockedJumping = false
@@ -78,34 +80,52 @@ function Room:recordUpdate (dt)
   if not self.freezeRunTime then
     self.runningTime = self.runningTime + dt
     if self.runningTime >= self.maxTime then
-      self:stopRecording()
-      self:reset()
-      self:startPlayback()
+      if self:checkComplete() then
+        self:runComplete()
+      else
+        self:runFailed()
+      end
       return
     end
   end
 
-  if not self.lockedMovement then
-    if love.keyboard.isDown('left') and love.keyboard.isDown('right') then
-      self.marine:stopMoving()
-      if self.timeline.currentMovement then
-        self.timeline:recordMovementStop(self.runningTime)
-      end
-    elseif love.keyboard.isDown('left') then
-      self.marine:moveLeft()
-      if not self.timeline.currentMovement then
-        self.timeline:recordMovementStart(self.runningTime, 'left')
-      end
-    elseif love.keyboard.isDown('right') then
-      self.marine:moveRight()
-      if not self.timeline.currentMovement then
-        self.timeline:recordMovementStart(self.runningTime, 'right')
-      end
-    else
-      self.marine:stopMoving()
-      if self.timeline.currentMovement then
-        self.timeline:recordMovementStop(self.runningTime)
-      end
+  if self.lockedMovement then
+    self:playbackMovement()
+  else
+    self:recordMovement()
+  end
+
+  if self.lockedJumping then
+    self:playbackJumping()
+  end
+
+  if self.lockedShooting then
+    self:playbackShooting()
+  end
+
+end
+
+function Room:recordMovement ()
+
+  if love.keyboard.isDown('left') and love.keyboard.isDown('right') then
+    self.marine:stopMoving()
+    if self.timeline.currentMovement then
+      self.timeline:recordMovementStop(self.runningTime)
+    end
+  elseif love.keyboard.isDown('left') then
+    self.marine:moveLeft()
+    if not self.timeline.currentMovement then
+      self.timeline:recordMovementStart(self.runningTime, 'left')
+    end
+  elseif love.keyboard.isDown('right') then
+    self.marine:moveRight()
+    if not self.timeline.currentMovement then
+      self.timeline:recordMovementStart(self.runningTime, 'right')
+    end
+  else
+    self.marine:stopMoving()
+    if self.timeline.currentMovement then
+      self.timeline:recordMovementStop(self.runningTime)
     end
   end
 
@@ -123,6 +143,18 @@ function Room:playbackUpdate (dt)
   end
 
   -- Movement
+  self:playbackMovement()
+
+  -- Jumping
+  self:playbackJumping()
+
+  -- Shooting
+  self:playbackShooting()
+
+end
+
+function Room:playbackMovement ()
+
   local moveAction = self.timeline.movement[self.playbackMovementIndex]
   if moveAction then
     if self.runningTime >= moveAction.time then
@@ -146,7 +178,10 @@ function Room:playbackUpdate (dt)
     end
   end
 
-  -- Jumping
+end
+
+function Room:playbackJumping ()
+
   local jumpAction = self.timeline.jumping[self.playbackJumpIndex]
   if jumpAction then
     if self.runningTime >= jumpAction.time then
@@ -157,7 +192,10 @@ function Room:playbackUpdate (dt)
     end
   end
 
-  -- Shooting
+end
+
+function Room:playbackShooting ()
+
   local shootAction = self.timeline.shooting[self.playbackShootIndex]
   if shootAction then
     if self.runningTime >= shootAction.time then
@@ -180,22 +218,34 @@ function Room:draw (x, y)
   love.graphics.setLineWidth(2)
   love.graphics.rectangle('line', 0, 0, 320, 320)
 
-  if self.textVisible then
-    love.graphics.setColor(1, 1, 1)
-    local x = self.width / 2 - self.pausedText:getWidth() / 2
-    local y = self.height / 2 - self.pausedText:getHeight() / 2
-    love.graphics.draw(self.pausedText, x, y)
+  if not self.recording and not self.playingBack then
+    if self.countdownText then
+      love.graphics.setColor(1, 1, 1)
+      local x = self.width / 2 - self.countdownText:getWidth() / 2
+      local y = self.height / 2 - self.countdownText:getHeight() / 2
+      love.graphics.draw(self.countdownText, x, y)
+    else
+      if self.status == 'complete' then
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.draw(Images.roomComplete, self.width / 2, self.height / 2, 0, 1, 1,
+          Images.roomComplete:getWidth() / 2, Images.roomComplete:getHeight() / 2)
+      else
+        if self.status == 'locked' then
+
+        elseif self.status == 'unlocked' then
+
+        end
+        love.graphics.setColor(1, 1, 1)
+        local x = self.width / 2 - self.overlayText:getWidth() / 2
+        local y = self.height / 2 - self.overlayText:getHeight() / 2
+        love.graphics.draw(self.overlayText, x, y)
+      end
+    end
   end
 
 end
 
 function Room:keypressed (key)
-
-  if not self.recording and not self.playingBack then
-    if key == 'left' or key == 'right' or key == 'up' or key == 'space' then
-      self:startRecording()
-    end
-  end
 
   if self.recording then
     
@@ -211,6 +261,10 @@ function Room:keypressed (key)
         self.marine:shoot()
         self.timeline:recordShot(self.runningTime)
       end
+    end
+
+    if key == 'r' then
+      self:runFailed()
     end
 
   end
@@ -284,8 +338,22 @@ function Room:startRecording ()
 
   self.recording = true
   self.runningTime = 0
-  self.timeline:clear()
   self.freezeRunTime = false
+  self.runningMovementAction = nil
+
+  if not self.lockedMovement then
+    self.timeline:clearMovement()
+  end
+  if not self.lockedJumping then
+    self.timeline:clearJumping()
+  end
+  if not self.lockedShooting then
+    self.timeline:clearShooting()
+  end
+
+  self.playbackJumpIndex = 1
+  self.playbackShootIndex = 1
+  self.playbackMovementIndex = 1
 
 end
 
@@ -336,17 +404,34 @@ function Room:setNextRoom (room)
 
 end
 
+function Room:runComplete ()
+
+  self:stop()
+  self:reset()
+  self:markComplete()
+  self:updateNextRoomTimeline()
+  self.scene:roomComplete()
+
+end
+
+function Room:runFailed ()
+
+  self:stop()
+  self:reset()
+  self.scene:roomFailed()
+
+end
+
 function Room:checkRunOver ()
 
   if self:checkComplete() then
 
     self.freezeRunTime = true
 
-    Timer.after(0.25, function () 
-      self:stop()
-      self:reset()
-      self:markComplete()
-      self:updateNextRoomTimeline()
+    Timer.after(0.5, function ()
+      if self.status ~= 'complete' then 
+        self:runComplete()
+      end
     end)
 
   end
@@ -380,6 +465,20 @@ function Room:stop ()
 
 end
 
+function Room:lockRoom ()
+
+  self.status = 'locked'
+  self.overlayText:set('Locked')
+
+end
+
+function Room:unlockRoom ()
+
+  self.status = 'unlocked'
+  self.overlayText:set('Press Space to Start')
+
+end
+
 function Room:markComplete ()
 
   self.status = 'complete'
@@ -389,7 +488,21 @@ end
 function Room:updateNextRoomTimeline ()
 
   if self.nextRoom then
+    self.nextRoom:updateTimeline(self.timeline)
+  end
 
+end
+
+function Room:updateTimeline (timeline)
+
+  if self.lockedMovement then
+    self.timeline.movement = timeline.movement
+  end
+  if self.lockedJumping then
+    self.timeline.jumping = timeline.jumping
+  end
+  if self.lockedShooting then
+    self.timeline.shooting = timeline.shooting
   end
 
 end
@@ -403,6 +516,25 @@ function Room:lockTimeline (lock)
   elseif lock == 'shoot' then
     self.lockedShooting = true
   end
+
+end
+
+function Room:startCountdown ()
+
+  -- Countdown
+  self.countdownText = love.graphics.newText(Fonts.verminVibes, '3')
+  Timer.after(0.5, function ()
+    self.countdownText:set('2')
+  end)
+  Timer.after(1, function ()
+    self.countdownText:set('1')
+  end)
+
+  -- Start recording
+  Timer.after(1.5, function ()
+    self.countdownText = nil
+    self:startRecording()
+  end)
 
 end
 

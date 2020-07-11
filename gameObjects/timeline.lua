@@ -57,8 +57,26 @@ end
 
 function Timeline:clear ()
 
+  self:clearMovement()
+  self:clearJumping()
+  self:clearShooting()
+
+end
+
+function Timeline:clearMovement ()
+
   self.movement = {}
+
+end
+
+function Timeline:clearJumping ()
+
   self.jumping = {}
+
+end
+
+function Timeline:clearShooting ()
+
   self.shooting = {}
 
 end

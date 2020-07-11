@@ -24,6 +24,7 @@ function GameScene:init (folderName)
   self.camera = Camera.new(0, 0)
   self:zoomToRoom(self.selectedRoom)
   self:setTimeline(self.selectedRoom)
+  self.selectedRoom:unlockRoom()
 
 end
 
@@ -72,6 +73,13 @@ function GameScene:keypressed (key)
     if key == 'tab' then
       self:zoomOut(0.5)
     end
+    if key == 'space' then
+      if self.selectedRoom.status == 'unlocked' then
+        self:zoomToRoom(self.selectedRoom)
+        self.activeRoom = self.selectedRoom
+        self.activeRoom:startCountdown()
+      end
+    end
   end
 
 end
@@ -112,7 +120,7 @@ function GameScene:createRooms (layout, roomMaps)
   for row = 1, #layout.rooms do
     rooms[row] = {}
     for column = 1, #layout.rooms[row] do
-      local newRoom = Room(roomMaps[roomCount], (column - 1) * self.roomWidth, (row - 1) * self.roomHeight)
+      local newRoom = Room(self, roomMaps[roomCount], (column - 1) * self.roomWidth, (row - 1) * self.roomHeight, column, row)
       rooms[row][column] = newRoom
       sortedRooms[roomCount] = newRoom
       roomCount = roomCount + 1
@@ -195,42 +203,59 @@ end
 
 function GameScene:scrollRooms (direction)
 
-  local room, dx, dy = self:getAdjacentRoom(direction)
+  local room = self:getAdjacentRoom(direction)
   if room then
-    self:zoomToRoom(room, 0.5)
-    self.selectedRoom = room
-    self.selectedRoomRow = self.selectedRoomRow + dy
-    self.selectedRoomColumn = self.selectedRoomColumn + dx
+    self:scrollToRoom(room)
   end
+
+end
+
+function GameScene:scrollToRoom (room)
+
+  self:zoomToRoom(room, 0.5)
+  self.selectedRoom = room
+  self.selectedRoomRow = room.gridY
+  self.selectedRoomColumn = room.gridX
+  self.timelineDisplay:setRoom(self.selectedRoom)
 
 end
 
 function GameScene:getAdjacentRoom (direction)
 
-  local room, dx, dy
+  local room
   if direction == 'left' then
     room = self.rooms[self.selectedRoomRow][self.selectedRoomColumn - 1]
-    dx = -1
-    dy = 0
   elseif direction == 'right' then
     room = self.rooms[self.selectedRoomRow][self.selectedRoomColumn + 1]
-    dx = 1
-    dy = 0
   elseif direction == 'up' then
     if self.rooms[self.selectedRoomRow - 1] then
       room = self.rooms[self.selectedRoomRow - 1][self.selectedRoomColumn]
-      dx = 0
-      dy = -1
     end
   elseif direction == 'down' then
     if self.rooms[self.selectedRoomRow + 1] then
       room = self.rooms[self.selectedRoomRow + 1][self.selectedRoomColumn]
-      dx = 0
-      dy = 1
     end
   end
 
-  return room, dx, dy
+  return room
+
+end
+
+function GameScene:roomComplete ()
+
+  if self.activeRoom.nextRoom then
+    self.activeRoom.nextRoom:unlockRoom()
+    self:scrollToRoom(self.activeRoom.nextRoom)
+  else
+    -- Level complete
+  end
+  self.activeRoom = nil
+
+end
+
+function GameScene:roomFailed ()
+
+  self.activeRoom = nil
 
 end
 

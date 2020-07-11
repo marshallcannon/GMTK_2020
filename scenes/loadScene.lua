@@ -19,6 +19,7 @@ function LoadScene:loadAll ()
   Images.jumpIcon = love.graphics.newImage('assets/images/jumpIcon.png')
   Images.shootIcon = love.graphics.newImage('assets/images/shootIcon.png')
   Images.lock = love.graphics.newImage('assets/images/lock.png')
+  Images.roomComplete = love.graphics.newImage('assets/images/roomComplete.png')
 
   Fonts = {}
 
