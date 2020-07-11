@@ -20,6 +20,12 @@ function LoadScene:loadAll ()
   Images.shootIcon = love.graphics.newImage('assets/images/shootIcon.png')
   Images.lock = love.graphics.newImage('assets/images/lock.png')
 
+  Fonts = {}
+
+  Fonts.extrude = love.graphics.newFont('assets/fonts/Extrude.ttf', 16, 'mono')
+  Fonts.eightBit = love.graphics.newFont('assets/fonts/8-bit-hud.ttf', 12, 'mono')
+  Fonts.verminVibes = love.graphics.newFont('assets/fonts/Vermin_Vibes_1989.ttf', 16, 'mono')
+
   self:loadingDone()
 
 end

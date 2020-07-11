@@ -30,11 +30,11 @@ function Room:init (roomMap, x, y)
 
   self.timeline = Timeline(self.maxTime)
 
-  self.pausedText = love.graphics.newText(love.graphics.getFont(), 'Complete prior room')
+  self.pausedText = love.graphics.newText(Fonts.verminVibes, 'Complete prior room')
   self.textVisible = true
 
-  -- waiting, active, complete
-  self.status = 'waiting'
+  -- locked, active, complete
+  self.status = 'locked'
 
   self.lockedMovement = false
   self.lockedJumping = false
