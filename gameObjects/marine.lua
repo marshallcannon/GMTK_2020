@@ -31,15 +31,6 @@ end
 
 function Marine:update (dt)
 
-  -- Input
-  if love.keyboard.isDown('left') then
-    self:moveLeft()
-  elseif love.keyboard.isDown('right') then
-    self:moveRight()
-  else
-    self:stopMoving()
-  end
-
   -- Gravity
   if not self.onGround then
     self.velocity.y = self.velocity.y + self.gravity * dt
@@ -95,18 +86,6 @@ function Marine:draw ()
 
 end
 
-function Marine:keypressed (key)
-
-  if key == 'up' then
-    self:jump()
-  end
-
-  if key == 'space' then
-    self:shoot()
-  end
-
-end
-
 function Marine:jump ()
 
   if self.onGround then
@@ -129,6 +108,8 @@ function Marine:shoot ()
 
   local bullet = Bullet(self.scene, x, y, direction)
   self.scene:addObject(bullet)
+
+  self.bullets = self.bullets - 1
 
 end
 
@@ -166,6 +147,18 @@ function Marine:hitCeiling ()
   if self.velocity.y < 0 then
     self.velocity.y = 0
   end
+
+end
+
+function Marine:canJump ()
+
+  return self.onGround
+
+end
+
+function Marine:canShoot ()
+
+  return self.bullets > 0
 
 end
 

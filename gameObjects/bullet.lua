@@ -4,8 +4,8 @@ local Bullet = Class {
   hitbox = {
     x = 0,
     y = 0,
-    width = 20,
-    height = 20
+    width = 10,
+    height = 10
   }
 }
 

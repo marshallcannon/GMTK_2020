@@ -1,5 +1,6 @@
 local Class = require 'libraries/class'
 local Room = require 'room'
+local TimelineDisplay = require 'gameObjects/timelineDisplay'
 
 local GameScene = Class {
   roomWidth = 320,
@@ -18,6 +19,9 @@ function GameScene:init (folderName)
   }
 
   self.activeRoom = self.rooms[1][1]
+
+  self.timelineDisplay = TimelineDisplay(love.graphics.getWidth() / 2 - 500, love.graphics.getHeight() - 190)
+  self.timelineDisplay:setRoom(self.rooms[1][1])
 
 end
 
@@ -40,11 +44,21 @@ function GameScene:draw ()
     end
   end
 
+  love.graphics.origin()
+
+  self.timelineDisplay:draw()
+
 end
 
 function GameScene:keypressed (key)
 
   self.activeRoom:keypressed(key)
+
+end
+
+function GameScene:keyreleased (key)
+
+  self.activeRoom:keyreleased(key)
 
 end
 

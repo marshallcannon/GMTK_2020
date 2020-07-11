@@ -46,4 +46,12 @@ function SceneManager:keypressed (key)
 
 end
 
+function SceneManager:keyreleased (key)
+
+  for i = 1, #self.sceneList do
+    self.sceneList[i]:keyreleased(key)
+  end
+
+end
+
 return SceneManager

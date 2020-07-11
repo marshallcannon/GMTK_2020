@@ -1,3 +1,5 @@
+Colors = require 'colors'
+
 function love.load ()
 
   love.window.setMode(0, 0, {vsync=false})
@@ -30,5 +32,11 @@ end
 function love.keypressed (key)
 
   SceneManager:keypressed(key)
+
+end
+
+function love.keyreleased (key)
+
+  SceneManager:keyreleased(key)
 
 end
