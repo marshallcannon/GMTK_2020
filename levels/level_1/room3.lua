@@ -9,7 +9,7 @@ return {
   tilewidth = 32,
   tileheight = 32,
   nextlayerid = 3,
-  nextobjectid = 9,
+  nextobjectid = 3,
   properties = {},
   tilesets = {
     {
@@ -79,12 +79,12 @@ return {
       data = {
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 1, 1, 1, 1, 1, 0, 0, 0, 1,
         1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
         1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 1, 1, 1, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 1, 1, 1, 0, 0, 0, 0, 0, 1,
-        1, 1, 1, 1, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 1, 1, 1, 1, 1, 1,
+        1, 0, 0, 0, 1, 1, 1, 1, 1, 1,
+        1, 0, 0, 0, 1, 1, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1
       }
@@ -101,12 +101,12 @@ return {
       properties = {},
       objects = {
         {
-          id = 7,
+          id = 1,
           name = "",
           type = "",
           shape = "rectangle",
-          x = 256,
-          y = 256,
+          x = 32,
+          y = 64,
           width = 32,
           height = 32,
           rotation = 0,
@@ -115,12 +115,12 @@ return {
           properties = {}
         },
         {
-          id = 8,
+          id = 2,
           name = "",
           type = "",
           shape = "rectangle",
-          x = 256,
-          y = 128,
+          x = 32,
+          y = 256,
           width = 32,
           height = 32,
           rotation = 0,

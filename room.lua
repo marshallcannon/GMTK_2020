@@ -29,7 +29,6 @@ function Room:init (scene, roomMap, x, y, gridX, gridY)
   self.recording = false
   self.runningTime = 0
   self.maxTime = 8
-  self.freezeRunTime = false
 
   self.timeline = Timeline(self.maxTime)
 
@@ -41,6 +40,10 @@ function Room:init (scene, roomMap, x, y, gridX, gridY)
   self.lockedMovement = false
   self.lockedJumping = false
   self.lockedShooting = false
+
+  -- Resetting the level
+  self.resetTimer = 0
+  self.resetMax = 1
 
 end
 
@@ -77,16 +80,14 @@ end
 
 function Room:recordUpdate (dt)
 
-  if not self.freezeRunTime then
-    self.runningTime = self.runningTime + dt
-    if self.runningTime >= self.maxTime then
-      if self:checkComplete() then
-        self:runComplete()
-      else
-        self:runFailed()
-      end
-      return
+  self.runningTime = self.runningTime + dt
+  if self.runningTime >= self.maxTime then
+    if self:checkComplete() then
+      self:runComplete()
+    else
+      self:runFailed()
     end
+    return
   end
 
   if self.lockedMovement then
@@ -133,13 +134,11 @@ end
 
 function Room:playbackUpdate (dt)
 
-  if not self.freezeRunTime then
-    self.runningTime = self.runningTime + dt
-    if self.runningTime >= self.maxTime then
-      self:stopPlayback()
-      self:reset()
-      return
-    end
+  self.runningTime = self.runningTime + dt
+  if self.runningTime >= self.maxTime then
+    self:stopPlayback()
+    self:reset()
+    return
   end
 
   -- Movement
@@ -229,6 +228,14 @@ function Room:draw (x, y)
         love.graphics.setColor(1, 1, 1)
         love.graphics.draw(Images.roomComplete, self.width / 2, self.height / 2, 0, 1, 1,
           Images.roomComplete:getWidth() / 2, Images.roomComplete:getHeight() / 2)
+        -- Reset timer indicator
+        if self.resetTimer == 0 then
+          love.graphics.setFont(Fonts.verminVibes)
+          love.graphics.print('\'r\' to reset', self.width / 2 - Fonts.verminVibes:getWidth('\'r\' to reset') / 2, self.height / 2 + 35)
+        else
+          local resetPercentage = self.resetTimer / self.resetMax
+          love.graphics.arc('fill', self.width / 2, self.height / 2 + 40, 15, -math.pi / 2, -math.pi / 2 + math.pi * 2 * resetPercentage)
+        end
       else
         if self.status == 'locked' then
 
@@ -264,6 +271,12 @@ function Room:keypressed (key)
     end
 
     if key == 'r' then
+      self:runFailed()
+      self.scene.activeRoom = self
+      self:startCountdown()
+    end
+
+    if key == 'escape' then
       self:runFailed()
     end
 
@@ -338,8 +351,17 @@ function Room:startRecording ()
 
   self.recording = true
   self.runningTime = 0
-  self.freezeRunTime = false
   self.runningMovementAction = nil
+
+  self:softClearTimeline()
+
+  self.playbackJumpIndex = 1
+  self.playbackShootIndex = 1
+  self.playbackMovementIndex = 1
+
+end
+
+function Room:softClearTimeline ()
 
   if not self.lockedMovement then
     self.timeline:clearMovement()
@@ -351,9 +373,11 @@ function Room:startRecording ()
     self.timeline:clearShooting()
   end
 
-  self.playbackJumpIndex = 1
-  self.playbackShootIndex = 1
-  self.playbackMovementIndex = 1
+end
+
+function Room:hardClearTimeline ()
+
+  self.timeline:clear()
 
 end
 
@@ -374,7 +398,6 @@ function Room:startPlayback ()
   self.playbackShootIndex = 1
   self.playbackMovementIndex = 1
   self.runningMovementAction = nil
-  self.freezeRunTime = false
 
 end
 
@@ -425,8 +448,6 @@ end
 function Room:checkRunOver ()
 
   if self:checkComplete() then
-
-    self.freezeRunTime = true
 
     Timer.after(0.5, function ()
       if self.status ~= 'complete' then 

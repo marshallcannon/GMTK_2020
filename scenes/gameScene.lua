@@ -30,8 +30,24 @@ end
 
 function GameScene:update (dt)
 
-  if self.activeRoom then
-    self.activeRoom:update(dt)
+  if self.finalPlayback then
+    for i = 1, #self.roomOrder do
+      self.roomOrder[i]:update(dt)
+    end
+  else
+    if self.activeRoom then
+      self.activeRoom:update(dt)
+    else
+      if love.keyboard.isDown('r') then
+        if self.selectedRoom.status == 'complete' then
+          self.selectedRoom.resetTimer = self.selectedRoom.resetTimer + dt
+          -- Reset after completion
+          if self.selectedRoom.resetTimer >= self.selectedRoom.resetMax then
+            self:resetToRoom(self.selectedRoom)
+          end
+        end
+      end
+    end
   end
 
   Timer.update(dt)
@@ -68,7 +84,9 @@ function GameScene:keypressed (key)
   else
     if key == 'left' or key == 'right' or
     key == 'up' or key == 'down' then
-      self:scrollRooms (key)
+      if not love.keyboard.isDown('r') then
+        self:scrollRooms (key)
+      end
     end
     if key == 'tab' then
       self:zoomOut(0.5)
@@ -88,6 +106,10 @@ function GameScene:keyreleased (key)
 
   if self.activeRoom then
     self.activeRoom:keyreleased(key)
+  else
+    if key == 'r' then
+      self.selectedRoom.resetTimer = 0
+    end
   end
 
 end
@@ -247,7 +269,8 @@ function GameScene:roomComplete ()
     self.activeRoom.nextRoom:unlockRoom()
     self:scrollToRoom(self.activeRoom.nextRoom)
   else
-    -- Level complete
+    self:zoomOut()
+    self:playAllRooms()
   end
   self.activeRoom = nil
 
@@ -256,6 +279,35 @@ end
 function GameScene:roomFailed ()
 
   self.activeRoom = nil
+
+end
+
+function GameScene:resetToRoom (resetRoom)
+
+  for i = #self.roomOrder, 1, -1 do
+    local room = self.roomOrder[i]
+    room:stop()
+    room:reset()
+    if room == resetRoom then
+      room:softClearTimeline()
+      room:unlockRoom()
+      break
+    else
+      room:hardClearTimeline()
+      room:lockRoom()
+    end
+  end
+
+  resetRoom.resetTimer = 0
+
+end
+
+function GameScene:playAllRooms ()
+
+  for i = 1, #self.roomOrder do
+    self.roomOrder[i]:startPlayback()
+  end
+  self.finalPlayback = true
 
 end
 
