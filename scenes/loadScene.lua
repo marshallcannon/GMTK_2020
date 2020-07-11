@@ -15,6 +15,10 @@ function LoadScene:loadAll ()
   Images.bullet = love.graphics.newImage('assets/images/bullet.png')
   Images.battery = love.graphics.newImage('assets/images/battery.png')
   Images.alien = love.graphics.newImage('assets/images/alien.png')
+  Images.movementIcon = love.graphics.newImage('assets/images/movementIcon.png')
+  Images.jumpIcon = love.graphics.newImage('assets/images/jumpIcon.png')
+  Images.shootIcon = love.graphics.newImage('assets/images/shootIcon.png')
+  Images.lock = love.graphics.newImage('assets/images/lock.png')
 
   self:loadingDone()
 

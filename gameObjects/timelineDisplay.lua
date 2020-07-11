@@ -17,9 +17,17 @@ function TimelineDisplay:draw ()
   love.graphics.setColor(Colors.Gray)
   love.graphics.rectangle('fill', self.x, self.y, self.width, self.height)
 
+  if not self.room then
+    return
+  end
+
   -- Jumping
+  love.graphics.setColor(1, 1, 1)
+  love.graphics.draw(Images.jumpIcon, self.x + 50, self.y + 10)
+  if self.room.lockedJumping then
+    love.graphics.draw(Images.lock, self.x, self.y + 10)
+  end
   love.graphics.setColor(Colors.Shadow)
-  love.graphics.circle('fill', self.x + 30, self.y + 30, 20)
   love.graphics.rectangle('fill', self.x + 100, self.y + 10, 890, 50)
   for i = 1, #self.timeline.jumping do
     local percentageTime = self.timeline.jumping[i].time / self.timeline.maxTime
@@ -28,8 +36,12 @@ function TimelineDisplay:draw ()
   end
 
   -- Movements
+  love.graphics.setColor(1, 1, 1)
+  love.graphics.draw(Images.movementIcon, self.x + 50, self.y + 65)
+  if self.room.lockedMovement then
+    love.graphics.draw(Images.lock, self.x, self.y + 65)
+  end
   love.graphics.setColor(Colors.Shadow)
-  love.graphics.circle('fill', self.x + 30, self.y + 90, 20)
   love.graphics.rectangle('fill', self.x + 100, self.y + 65, 890, 50)
   for i = 1, #self.timeline.movement, 2 do
     assert(self.timeline.movement[i].type == 'start', 'Should be a start')
@@ -53,8 +65,12 @@ function TimelineDisplay:draw ()
   end
 
   -- Shooting
+  love.graphics.setColor(1, 1, 1)
+  love.graphics.draw(Images.shootIcon, self.x + 50, self.y + 120)
+  if self.room.lockedShooting then
+    love.graphics.draw(Images.lock, self.x, self.y + 120)
+  end
   love.graphics.setColor(Colors.Shadow)
-  love.graphics.circle('fill', self.x + 30, self.y + 150, 20)
   love.graphics.rectangle('fill', self.x + 100, self.y + 120, 890, 50)
   for i = 1, #self.timeline.shooting do
     local percentageTime = self.timeline.shooting[i].time / self.timeline.maxTime

@@ -189,7 +189,7 @@ end
 function Marine:grabBattery (battery)
 
   battery.dead = true
-  self.room:checkComplete()
+  self.room:checkRunOver()
 
 end
 

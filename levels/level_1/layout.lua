@@ -4,5 +4,8 @@ return {
   },
   order = {
     {1, 2, 3}
+  },
+  locks = {
+    {nil, 'jump', 'move'}
   }
 }

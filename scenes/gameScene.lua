@@ -15,19 +15,23 @@ function GameScene:init (folderName)
   self.roomMaps = self:loadRoomMaps(folderName, self.levelLayout)
   self.rooms, self.roomOrder = self:createRooms(self.levelLayout, self.roomMaps)
 
-  self.activeRoom = self.rooms[1][1]
+  self.selectedRoomRow = 1
+  self.selectedRoomColumn = 1
+  self.selectedRoom = self.rooms[self.selectedRoomRow][self.selectedRoomColumn]
 
   self.timelineDisplay = TimelineDisplay(love.graphics.getWidth() / 2 - 500, love.graphics.getHeight() - 190)
-  self.timelineDisplay:setRoom(self.rooms[1][1])
 
   self.camera = Camera.new(0, 0)
-  self:zoomToRoom(self.roomOrder[1])
+  self:zoomToRoom(self.selectedRoom)
+  self:setTimeline(self.selectedRoom)
 
 end
 
 function GameScene:update (dt)
 
-  self.activeRoom:update(dt)
+  if self.activeRoom then
+    self.activeRoom:update(dt)
+  end
 
   Timer.update(dt)
 
@@ -58,13 +62,25 @@ end
 
 function GameScene:keypressed (key)
 
-  self.activeRoom:keypressed(key)
+  if self.activeRoom then
+    self.activeRoom:keypressed(key)
+  else
+    if key == 'left' or key == 'right' or
+    key == 'up' or key == 'down' then
+      self:scrollRooms (key)
+    end
+    if key == 'tab' then
+      self:zoomOut(0.5)
+    end
+  end
 
 end
 
 function GameScene:keyreleased (key)
 
-  self.activeRoom:keyreleased(key)
+  if self.activeRoom then
+    self.activeRoom:keyreleased(key)
+  end
 
 end
 
@@ -96,7 +112,7 @@ function GameScene:createRooms (layout, roomMaps)
   for row = 1, #layout.rooms do
     rooms[row] = {}
     for column = 1, #layout.rooms[row] do
-      local newRoom = Room(roomMaps[roomCount], (row - 1) * self.roomWidth, (column - 1) * self.roomHeight)
+      local newRoom = Room(roomMaps[roomCount], (column - 1) * self.roomWidth, (row - 1) * self.roomHeight)
       rooms[row][column] = newRoom
       sortedRooms[roomCount] = newRoom
       roomCount = roomCount + 1
@@ -112,6 +128,17 @@ function GameScene:createRooms (layout, roomMaps)
     end
     if sortedRooms[i + 1] then
       sortedRooms[i]:setNextRoom(sortedRooms[i + 1])
+    end
+  end
+
+  -- Lock timelines
+  for row = 1, #rooms do
+    for column = 1, #rooms[row] do
+      local room = rooms[row][column]
+      local lockedTimeline = layout.locks[row][column]
+      if room and lockedTimeline then
+        room:lockTimeline(lockedTimeline)
+      end
     end
   end
 
@@ -131,7 +158,12 @@ function GameScene:zoomToCoordinates (x, y, zoom, time)
   zoom = zoom or 1
   time = time or 1
 
-  Timer.tween(time, self.camera, { scale = 2, x = x, y = y }, 'in-out-quad')
+  if self.cameraTween then
+    Timer.cancel(self.cameraTween)
+  end
+  self.cameraTween = Timer.tween(time, self.camera, { scale = zoom, x = x, y = y }, 'in-out-quad', function ()
+    self.cameraTween = nil
+  end)
 
 end
 
@@ -145,13 +177,60 @@ function GameScene:zoomOut (time)
     roomsWidth = math.max(roomsWidth, #self.rooms[i])
   end
 
-  self:zoomToCoordinates(roomsWidth * self.roomWidth / 2, roomsHeight * self.roomHeight / 2, 1)
+  self:zoomToCoordinates(roomsWidth * self.roomWidth / 2, roomsHeight * self.roomHeight / 2, 1, time)
 
 end
 
 function GameScene:getRoomCenter (room)
 
   return room.x + self.roomWidth / 2, room.y + self.roomHeight / 2
+
+end
+
+function GameScene:setTimeline (room)
+
+  self.timelineDisplay:setRoom(room)
+
+end
+
+function GameScene:scrollRooms (direction)
+
+  local room, dx, dy = self:getAdjacentRoom(direction)
+  if room then
+    self:zoomToRoom(room, 0.5)
+    self.selectedRoom = room
+    self.selectedRoomRow = self.selectedRoomRow + dy
+    self.selectedRoomColumn = self.selectedRoomColumn + dx
+  end
+
+end
+
+function GameScene:getAdjacentRoom (direction)
+
+  local room, dx, dy
+  if direction == 'left' then
+    room = self.rooms[self.selectedRoomRow][self.selectedRoomColumn - 1]
+    dx = -1
+    dy = 0
+  elseif direction == 'right' then
+    room = self.rooms[self.selectedRoomRow][self.selectedRoomColumn + 1]
+    dx = 1
+    dy = 0
+  elseif direction == 'up' then
+    if self.rooms[self.selectedRoomRow - 1] then
+      room = self.rooms[self.selectedRoomRow - 1][self.selectedRoomColumn]
+      dx = 0
+      dy = -1
+    end
+  elseif direction == 'down' then
+    if self.rooms[self.selectedRoomRow + 1] then
+      room = self.rooms[self.selectedRoomRow + 1][self.selectedRoomColumn]
+      dx = 0
+      dy = 1
+    end
+  end
+
+  return room, dx, dy
 
 end
 

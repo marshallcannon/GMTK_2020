@@ -36,6 +36,10 @@ function Room:init (roomMap, x, y)
   -- waiting, active, complete
   self.status = 'waiting'
 
+  self.lockedMovement = false
+  self.lockedJumping = false
+  self.lockedShooting = false
+
 end
 
 function Room:update (dt)
@@ -81,25 +85,27 @@ function Room:recordUpdate (dt)
     end
   end
 
-  if love.keyboard.isDown('left') and love.keyboard.isDown('right') then
-    self.marine:stopMoving()
-    if self.timeline.currentMovement then
-      self.timeline:recordMovementStop(self.runningTime)
-    end
-  elseif love.keyboard.isDown('left') then
-    self.marine:moveLeft()
-    if not self.timeline.currentMovement then
-      self.timeline:recordMovementStart(self.runningTime, 'left')
-    end
-  elseif love.keyboard.isDown('right') then
-    self.marine:moveRight()
-    if not self.timeline.currentMovement then
-      self.timeline:recordMovementStart(self.runningTime, 'right')
-    end
-  else
-    self.marine:stopMoving()
-    if self.timeline.currentMovement then
-      self.timeline:recordMovementStop(self.runningTime)
+  if not self.lockedMovement then
+    if love.keyboard.isDown('left') and love.keyboard.isDown('right') then
+      self.marine:stopMoving()
+      if self.timeline.currentMovement then
+        self.timeline:recordMovementStop(self.runningTime)
+      end
+    elseif love.keyboard.isDown('left') then
+      self.marine:moveLeft()
+      if not self.timeline.currentMovement then
+        self.timeline:recordMovementStart(self.runningTime, 'left')
+      end
+    elseif love.keyboard.isDown('right') then
+      self.marine:moveRight()
+      if not self.timeline.currentMovement then
+        self.timeline:recordMovementStart(self.runningTime, 'right')
+      end
+    else
+      self.marine:stopMoving()
+      if self.timeline.currentMovement then
+        self.timeline:recordMovementStop(self.runningTime)
+      end
     end
   end
 
@@ -176,8 +182,8 @@ function Room:draw (x, y)
 
   if self.textVisible then
     love.graphics.setColor(1, 1, 1)
-    local x = self.x + self.width / 2 - self.pausedText:getWidth() / 2
-    local y = self.y + self.height / 2 - self.pausedText:getHeight() / 2
+    local x = self.width / 2 - self.pausedText:getWidth() / 2
+    local y = self.height / 2 - self.pausedText:getHeight() / 2
     love.graphics.draw(self.pausedText, x, y)
   end
 
@@ -193,14 +199,18 @@ function Room:keypressed (key)
 
   if self.recording then
     
-    if key == 'up' and self.marine:canJump() then
-      self.marine:jump()
-      self.timeline:recordJump(self.runningTime)
+    if not self.lockedJumping then
+      if key == 'up' and self.marine:canJump() then
+        self.marine:jump()
+        self.timeline:recordJump(self.runningTime)
+      end
     end
 
-    if key == 'space' and self.marine:canShoot() then
-      self.marine:shoot()
-      self.timeline:recordShot(self.runningTime)
+    if not self.lockedShooting then
+      if key == 'space' and self.marine:canShoot() then
+        self.marine:shoot()
+        self.timeline:recordShot(self.runningTime)
+      end
     end
 
   end
@@ -326,6 +336,23 @@ function Room:setNextRoom (room)
 
 end
 
+function Room:checkRunOver ()
+
+  if self:checkComplete() then
+
+    self.freezeRunTime = true
+
+    Timer.after(0.25, function () 
+      self:stop()
+      self:reset()
+      self:markComplete()
+      self:updateNextRoomTimeline()
+    end)
+
+  end
+
+end
+
 function Room:checkComplete ()
 
   for i = 1, #self.objects do
@@ -337,15 +364,11 @@ function Room:checkComplete ()
     end
   end
 
-  self.freezeRunTime = true
-
-  Timer.after(0.25, function () self:stop() end)
+  return true
 
 end
 
 function Room:stop ()
-
-  print('stop')
 
   if self.recording then
     self:stopRecording()
@@ -353,6 +376,32 @@ function Room:stop ()
 
   if self.playingBack then
     self:stopPlayback()
+  end
+
+end
+
+function Room:markComplete ()
+
+  self.status = 'complete'
+
+end
+
+function Room:updateNextRoomTimeline ()
+
+  if self.nextRoom then
+
+  end
+
+end
+
+function Room:lockTimeline (lock)
+
+  if lock == 'move' then
+    self.lockedMovement = true
+  elseif lock == 'jump' then
+    self.lockedJumping = true
+  elseif lock == 'shoot' then
+    self.lockedShooting = true
   end
 
 end
