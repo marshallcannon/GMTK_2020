@@ -45,6 +45,8 @@ function Room:init (scene, roomMap, x, y, gridX, gridY)
   self.resetTimer = 0
   self.resetMax = 1
 
+  self.canvas = love.graphics.newCanvas(self.width, self.height)
+
 end
 
 function Room:update (dt)
@@ -225,6 +227,10 @@ function Room:draw (x, y)
       love.graphics.draw(self.countdownText, x, y)
     else
       if self.status == 'complete' then
+        -- Dark overlay
+        love.graphics.setColor(0, 0, 0, 0.5)
+        love.graphics.rectangle('fill', 0, 0, self.width, self.height)
+        -- Checkmark
         love.graphics.setColor(1, 1, 1)
         love.graphics.draw(Images.roomComplete, self.width / 2, self.height / 2, 0, 1, 1,
           Images.roomComplete:getWidth() / 2, Images.roomComplete:getHeight() / 2)
@@ -238,13 +244,30 @@ function Room:draw (x, y)
         end
       else
         if self.status == 'locked' then
-
-        elseif self.status == 'unlocked' then
-
+          -- Dark overlay
+          love.graphics.setColor(0, 0, 0, 0.5)
+          love.graphics.rectangle('fill', 0, 0, self.width, self.height)
         end
+        -- Locked timeline indication
+        local lockedIcons = self:getLockedIcons()
+        love.graphics.setColor(1, 1, 1)
+        for i = 1, #lockedIcons do
+          local x = self.width / 2
+          if #lockedIcons == 1 or #lockedIcons == 3 then
+            x = x
+          elseif #lockedIcons == 2 then
+            x = x - 75 + i * 50
+          elseif #lockedIcons == 3 then
+            x = x - 100 + i * 50
+          end
+          local y = self.height / 2 - lockedIcons[i]:getHeight() / 2
+          love.graphics.draw(Images.lock, x, y, 0, 1, 1, 25)
+          love.graphics.draw(lockedIcons[i], x, y, 0, 0.5, 0.5, 25, -25)
+        end
+        -- Overlay text
         love.graphics.setColor(1, 1, 1)
         local x = self.width / 2 - self.overlayText:getWidth() / 2
-        local y = self.height / 2 - self.overlayText:getHeight() / 2
+        local y = self.height / 2 - self.overlayText:getHeight() / 2 + 30
         love.graphics.draw(self.overlayText, x, y)
       end
     end
@@ -489,7 +512,7 @@ end
 function Room:lockRoom ()
 
   self.status = 'locked'
-  self.overlayText:set('Locked')
+  self.overlayText:set('')
 
 end
 
@@ -556,6 +579,23 @@ function Room:startCountdown ()
     self.countdownText = nil
     self:startRecording()
   end)
+
+end
+
+function Room:getLockedIcons ()
+
+  local icons = {}
+  if self.lockedJumping then
+    table.insert(icons, Images.jumpIcon)
+  end
+  if self.lockedMovement then
+    table.insert(icons, Images.movementIcon)
+  end
+  if self.lockedShooting then
+    table.insert(icons, Images.shootIcon)
+  end
+
+  return icons
 
 end
 

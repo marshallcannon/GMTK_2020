@@ -84,7 +84,7 @@ function GameScene:keypressed (key)
   else
     if key == 'left' or key == 'right' or
     key == 'up' or key == 'down' then
-      if not love.keyboard.isDown('r') then
+      if not love.keyboard.isDown('r') and not self.finalPlayback then
         self:scrollRooms (key)
       end
     end
