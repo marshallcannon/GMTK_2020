@@ -267,7 +267,7 @@ function Room:draw (x, y)
         -- Overlay text
         love.graphics.setColor(1, 1, 1)
         local x = self.width / 2 - self.overlayText:getWidth() / 2
-        local y = self.height / 2 - self.overlayText:getHeight() / 2 + 30
+        local y = self.height / 2 - self.overlayText:getHeight() / 2 + 35
         love.graphics.draw(self.overlayText, x, y)
       end
     end
