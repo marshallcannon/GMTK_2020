@@ -93,9 +93,9 @@ function Room:recordUpdate (dt)
   end
 
   if self.lockedMovement then
-    self:playbackMovement()
+    self:playbackMovement(dt)
   else
-    self:recordMovement()
+    self:recordMovement(dt)
   end
 
   if self.lockedJumping then
@@ -108,7 +108,7 @@ function Room:recordUpdate (dt)
 
 end
 
-function Room:recordMovement ()
+function Room:recordMovement (dt)
 
   if love.keyboard.isDown('left') and love.keyboard.isDown('right') then
     self.marine:stopMoving()
@@ -116,12 +116,12 @@ function Room:recordMovement ()
       self.timeline:recordMovementStop(self.runningTime)
     end
   elseif love.keyboard.isDown('left') then
-    self.marine:moveLeft()
+    self.marine:moveLeft(dt)
     if not self.timeline.currentMovement then
       self.timeline:recordMovementStart(self.runningTime, 'left')
     end
   elseif love.keyboard.isDown('right') then
-    self.marine:moveRight()
+    self.marine:moveRight(dt)
     if not self.timeline.currentMovement then
       self.timeline:recordMovementStart(self.runningTime, 'right')
     end
@@ -144,7 +144,7 @@ function Room:playbackUpdate (dt)
   end
 
   -- Movement
-  self:playbackMovement()
+  self:playbackMovement(dt)
 
   -- Jumping
   self:playbackJumping()
@@ -154,7 +154,7 @@ function Room:playbackUpdate (dt)
 
 end
 
-function Room:playbackMovement ()
+function Room:playbackMovement (dt)
 
   local moveAction = self.timeline.movement[self.playbackMovementIndex]
   if moveAction then
@@ -173,9 +173,9 @@ function Room:playbackMovement ()
   end
   if self.runningMovementAction then
     if self.runningMovementAction.direction == 'left' then
-      self.marine:moveLeft()
+      self.marine:moveLeft(dt)
     elseif self.runningMovementAction.direction == 'right' then
-      self.marine:moveRight()
+      self.marine:moveRight(dt)
     end
   end
 
@@ -357,7 +357,8 @@ function Room:buildRoom (roomMap)
     local x = object.x
     local y = object.y - 32
     if object.gid == 2 then
-      local marine = Marine(self, x, y)
+      -- The marine needs to start in the center of its tile
+      local marine = Marine(self, x + 16 - Marine.hitbox.width / 2, y)
       self:addObject(marine)
       self.marine = marine
     elseif object.gid == 3 then

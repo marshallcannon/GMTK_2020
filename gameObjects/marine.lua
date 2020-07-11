@@ -21,9 +21,12 @@ function Marine:init (scene, x, y)
   }
 
   self.onGround = false
-  self.gravity = 500
-  self.jumpPower = 300
-  self.speed = 80
+  self.gravity = 800
+  self.jumpPower = 400
+  self.acceleration = 900
+  self.friction = 600
+  self.airMultiplier = 0.5
+  self.maxSpeed = 120
   self.directionFacing = 'right'
   self.bullets = 3
 
@@ -34,6 +37,21 @@ function Marine:update (dt)
   -- Gravity
   if not self.onGround then
     self.velocity.y = self.velocity.y + self.gravity * dt
+  end
+
+  -- Friction
+  if self.onGround then
+    if self.velocity.x > 0 then
+      self.velocity.x = self.velocity.x - self.friction * dt
+    elseif self.velocity.x < 0 then
+      self.velocity.x = self.velocity.x + self.friction * dt
+    end
+  end
+
+  -- Cap movement speed
+  if math.abs(self.velocity.x) > self.maxSpeed then
+    if self.velocity.x > 0 then self.velocity.x = self.maxSpeed end
+    if self.velocity.x < 0 then self.velocity.x = -self.maxSpeed end
   end
 
   -- Movement
@@ -71,6 +89,7 @@ end
 function Marine:draw ()
 
   if self.onGround then
+
     love.graphics.setColor(1, 1, 1)
   else
     love.graphics.setColor(1, 0, 0)
@@ -120,23 +139,35 @@ function Marine:shoot ()
 
 end
 
-function Marine:moveLeft ()
+function Marine:moveLeft (dt)
 
-  self.velocity.x = -self.speed
+  local acceleration
+  if self.onGround then
+    acceleration = self.acceleration * dt
+  else
+    acceleration = self.acceleration * self.airMultiplier * dt
+  end
+  self.velocity.x = self.velocity.x - acceleration
   self.directionFacing = 'left'
 
 end
 
-function Marine:moveRight ()
+function Marine:moveRight (dt)
 
-  self.velocity.x = self.speed
+  local acceleration
+  if self.onGround then
+    acceleration = self.acceleration * dt
+  else
+    acceleration = self.acceleration * self.airMultiplier * dt
+  end
+  self.velocity.x = self.velocity.x + acceleration
   self.directionFacing = 'right'
 
 end
 
 function Marine:stopMoving ()
 
-  self.velocity.x = 0
+  -- self.velocity.x = 0
 
 end
 
