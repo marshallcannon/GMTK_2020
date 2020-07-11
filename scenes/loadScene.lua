@@ -13,6 +13,8 @@ function LoadScene:loadAll ()
   Images.marine = love.graphics.newImage('assets/images/marine.png')
   Images.block = love.graphics.newImage('assets/images/block.png')
   Images.bullet = love.graphics.newImage('assets/images/bullet.png')
+  Images.battery = love.graphics.newImage('assets/images/battery.png')
+  Images.alien = love.graphics.newImage('assets/images/alien.png')
 
   self:loadingDone()
 

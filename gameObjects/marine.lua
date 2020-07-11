@@ -12,7 +12,7 @@ local Marine = Class {
 
 function Marine:init (scene, x, y)
 
-  self.scene = scene
+  self.room = scene
   self.x = x
   self.y = y
   self.velocity = {
@@ -24,7 +24,7 @@ function Marine:init (scene, x, y)
   self.gravity = 500
   self.jumpPower = 300
   self.speed = 80
-  self.directionFacing = 'left'
+  self.directionFacing = 'right'
   self.bullets = 3
 
 end
@@ -39,12 +39,19 @@ function Marine:update (dt)
   -- Movement
   local goalX = self.x + self.velocity.x * dt
   local goalY = self.y + self.velocity.y * dt
-  local actualX, actualY, collisions = self.scene.bumpWorld:move(self, goalX, goalY)
+  local actualX, actualY, collisions = self.room.bumpWorld:move(self, goalX, goalY, self.shouldCollide)
   self.x = actualX
   self.y = actualY
 
+  -- Check for collectibles
+  for i = 1, #collisions do
+    if collisions[i].other.name == 'battery' then
+      self:grabBattery(collisions[i].other)
+    end
+  end
+
   -- Ground detection
-  local itemsBelow = self.scene.bumpWorld:queryRect(self.x, self.y + self.hitbox.height, self.hitbox.width, 1)
+  local itemsBelow = self.room.bumpWorld:queryRect(self.x, self.y + self.hitbox.height, self.hitbox.width, 1, self.shouldCollideQuery)
   if #itemsBelow > 0 then
     if not self.onGround then
       self:hitGround()
@@ -54,7 +61,7 @@ function Marine:update (dt)
   end
 
   -- Ceiling detection
-  local itemsAbove = self.scene.bumpWorld:queryRect(self.x, self.y - 3, self.hitbox.width, 3)
+  local itemsAbove = self.room.bumpWorld:queryRect(self.x, self.y - 3, self.hitbox.width, 3, self.shouldCollideQuery)
   if #itemsAbove > 0 then
     self:hitCeiling()
   end
@@ -79,7 +86,7 @@ function Marine:draw ()
   love.graphics.draw(Images.marine, self.x - self.hitbox.x, self.y - self.hitbox.y, 0, scaleX, 1, offsetX)
 
   -- Debugging
-  local x, y, w, h = self.scene.bumpWorld:getRect(self)
+  local x, y, w, h = self.room.bumpWorld:getRect(self)
   love.graphics.setColor(1, 1, 1)
   love.graphics.setLineWidth(1)
   love.graphics.rectangle('line', x, y, w, h)
@@ -106,8 +113,8 @@ function Marine:shoot ()
   end
   local y = self.y + self.hitbox.height / 2 - 10
 
-  local bullet = Bullet(self.scene, x, y, direction)
-  self.scene:addObject(bullet)
+  local bullet = Bullet(self.room, x, y, direction)
+  self.room:addObject(bullet)
 
   self.bullets = self.bullets - 1
 
@@ -159,6 +166,30 @@ end
 function Marine:canShoot ()
 
   return self.bullets > 0
+
+end
+
+-- Collision filter function
+function Marine.shouldCollide (item, other)
+
+  if other.solid then
+    return 'slide'
+  elseif other.collectible then
+    return 'cross'
+  end
+
+end
+
+function Marine.shouldCollideQuery (item)
+
+  return item.solid
+
+end
+
+function Marine:grabBattery (battery)
+
+  battery.dead = true
+  self.room:checkComplete()
 
 end
 

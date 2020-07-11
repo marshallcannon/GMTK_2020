@@ -13,7 +13,7 @@ function GameScene:init (folderName)
 
   self.levelLayout = require('levels/' .. folderName .. '/layout')
   self.roomMaps = self:loadRoomMaps(folderName, self.levelLayout)
-  self.rooms = self:createRooms(self.levelLayout, self.roomMaps)
+  self.rooms, self.roomOrder = self:createRooms(self.levelLayout, self.roomMaps)
 
   self.activeRoom = self.rooms[1][1]
 
@@ -21,7 +21,7 @@ function GameScene:init (folderName)
   self.timelineDisplay:setRoom(self.rooms[1][1])
 
   self.camera = Camera.new(0, 0)
-  self:zoomToRoom(self.rooms[1][1])
+  self:zoomToRoom(self.roomOrder[1])
 
 end
 
@@ -60,10 +60,6 @@ function GameScene:keypressed (key)
 
   self.activeRoom:keypressed(key)
 
-  if key == 'f' then
-    self:zoomOut()
-  end
-
 end
 
 function GameScene:keyreleased (key)
@@ -92,16 +88,34 @@ function GameScene:createRooms (layout, roomMaps)
 
   local rooms = {}
 
+  -- Order the rooms are played in
+  local sortedRooms = {}
+
+  -- Create rooms
   local roomCount = 1
   for row = 1, #layout.rooms do
     rooms[row] = {}
     for column = 1, #layout.rooms[row] do
-      rooms[row][column] = Room(roomMaps[roomCount], (row - 1) * self.roomWidth, (column - 1) * self.roomHeight)
+      local newRoom = Room(roomMaps[roomCount], (row - 1) * self.roomWidth, (column - 1) * self.roomHeight)
+      rooms[row][column] = newRoom
+      sortedRooms[roomCount] = newRoom
       roomCount = roomCount + 1
     end
   end
 
-  return rooms
+  assert(#sortedRooms == roomCount - 1, 'The room order got fucked up')
+
+  -- Link rooms in order
+  for i = 1, #sortedRooms do
+    if sortedRooms[i - 1] then
+      sortedRooms[i]:setPriorRoom(sortedRooms[i - 1])
+    end
+    if sortedRooms[i + 1] then
+      sortedRooms[i]:setNextRoom(sortedRooms[i + 1])
+    end
+  end
+
+  return rooms, sortedRooms
 
 end
 

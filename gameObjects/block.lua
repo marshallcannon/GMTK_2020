@@ -5,7 +5,8 @@ local Block = Class {
     x = 0, y = 0,
     width = 32,
     height = 32
-  }
+  },
+  solid = true
 }
 
 function Block:init (x, y)
