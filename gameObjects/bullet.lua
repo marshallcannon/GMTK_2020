@@ -15,7 +15,7 @@ function Bullet:init (scene, x, y, direction)
   self.x = x
   self.y = y
   self.direction = direction
-  self.speed = 200
+  self.speed = 400
   self.velocity = {
     x = self.speed * direction,
     y = 0
