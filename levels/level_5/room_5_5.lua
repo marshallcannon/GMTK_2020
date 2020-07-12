@@ -9,7 +9,7 @@ return {
   tilewidth = 32,
   tileheight = 32,
   nextlayerid = 3,
-  nextobjectid = 7,
+  nextobjectid = 9,
   properties = {},
   tilesets = {
     {
@@ -32,7 +32,7 @@ return {
       },
       properties = {},
       terrains = {},
-      tilecount = 6,
+      tilecount = 7,
       tiles = {
         {
           id = 0,
@@ -69,6 +69,12 @@ return {
           image = "../../assets/images/spikesBottom.png",
           width = 32,
           height = 32
+        },
+        {
+          id = 6,
+          image = "../../assets/images/glass.png",
+          width = 32,
+          height = 32
         }
       }
     }
@@ -90,14 +96,14 @@ return {
       encoding = "lua",
       data = {
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 0, 0, 0, 0, 1, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 1, 0, 0, 1,
         1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 1, 1,
-        1, 1, 1, 1, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 1, 1, 1, 1,
-        1, 0, 0, 0, 0, 1, 1, 1, 1, 1,
-        1, 0, 0, 0, 1, 1, 1, 1, 1, 1,
+        1, 0, 0, 0, 1, 0, 0, 0, 1, 1,
+        1, 0, 0, 0, 1, 0, 1, 0, 1, 1,
+        1, 1, 1, 0, 0, 0, 1, 0, 0, 1,
+        1, 1, 1, 0, 0, 0, 0, 0, 0, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1
       }
     },
@@ -113,40 +119,12 @@ return {
       properties = {},
       objects = {
         {
-          id = 3,
-          name = "",
-          type = "",
-          shape = "rectangle",
-          x = 256,
-          y = 192,
-          width = 32,
-          height = 32,
-          rotation = 0,
-          gid = 6,
-          visible = true,
-          properties = {}
-        },
-        {
-          id = 4,
-          name = "",
-          type = "",
-          shape = "rectangle",
-          x = 224,
-          y = 192,
-          width = 32,
-          height = 32,
-          rotation = 0,
-          gid = 6,
-          visible = true,
-          properties = {}
-        },
-        {
           id = 5,
           name = "",
           type = "",
           shape = "rectangle",
           x = 32,
-          y = 160,
+          y = 192,
           width = 32,
           height = 32,
           rotation = 0,
@@ -159,12 +137,40 @@ return {
           name = "",
           type = "",
           shape = "rectangle",
-          x = 32,
-          y = 288,
+          x = 128,
+          y = 128,
           width = 32,
           height = 32,
           rotation = 0,
           gid = 2,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 7,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 224,
+          y = 256,
+          width = 32,
+          height = 32,
+          rotation = 0,
+          gid = 6,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 8,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 128,
+          y = 256,
+          width = 32,
+          height = 32,
+          rotation = 0,
+          gid = 6,
           visible = true,
           properties = {}
         }

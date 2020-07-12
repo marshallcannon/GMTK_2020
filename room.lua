@@ -4,6 +4,7 @@ local Timer = require 'libraries/timer'
 local Timeline = require 'gameObjects/timeline'
 local Marine = require 'gameObjects/marine'
 local Block = require 'gameObjects/block'
+local Glass = require 'gameObjects/glass'
 local Battery = require 'gameObjects/battery'
 local Alien = require 'gameObjects/alien'
 local SpikesTop = require 'gameObjects/spikesTop'
@@ -374,11 +375,14 @@ function Room:buildRoom (roomMap)
 
   -- Tile layer
   for i = 1, #tileLayer.data do
+    local x = ((i - 1) % 10) * 32
+    local y = math.floor((i - 1) / 10) * 32
     if tileLayer.data[i] == 1 then
-      local x = ((i - 1) % 10) * 32
-      local y = math.floor((i - 1) / 10) * 32
       local block = Block(x, y)
       self:addObject(block)
+    elseif tileLayer.data[i] == 7 then
+      local glass = Glass(x, y)
+      self:addObject(glass)
     end
   end
 

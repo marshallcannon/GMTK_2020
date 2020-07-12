@@ -443,17 +443,23 @@ end
 
 function GameScene:goToNextLevel ()
 
-  Game.levelIndex = Game.levelIndex + 1
-  SceneManager:add(GameScenes.Transition(1))
+  if not self.exiting then
 
-  Timer.after(0.5, function ()
-    SceneManager:remove(self)
-    if LevelOrder[Game.levelIndex] then
-      SceneManager:add(GameScenes.Game(LevelOrder[Game.levelIndex]), 1)
-    else
-      SceneManager:add(GameScenes.Credits(), 1)
-    end
-  end)
+    self.exiting = true
+
+    Game.levelIndex = Game.levelIndex + 1
+    SceneManager:add(GameScenes.Transition(1))
+
+    Timer.after(0.5, function ()
+      SceneManager:remove(self)
+      if LevelOrder[Game.levelIndex] then
+        SceneManager:add(GameScenes.Game(LevelOrder[Game.levelIndex]), 1)
+      else
+        SceneManager:add(GameScenes.Credits(), 1)
+      end
+    end)
+
+  end
 
 end
 

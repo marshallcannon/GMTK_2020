@@ -1,28 +1,28 @@
 local Class = require 'libraries/class'
 
-local Block = Class {
+local Glass = Class {
   hitbox = {
     x = 0, y = 0,
     width = 32,
     height = 32
   },
   solid = true,
-  blocksVision = true,
-  name = 'block'
+  blocksVision = false,
+  name = 'glass'
 }
 
-function Block:init (x, y)
+function Glass:init (x, y)
 
   self.x = x
   self.y = y
 
 end
 
-function Block:draw ()
+function Glass:draw ()
 
   love.graphics.setColor(1, 1, 1)
-  love.graphics.draw(Images.block, self.x, self.y)
+  love.graphics.draw(Images.glass, self.x, self.y)
 
 end
 
-return Block
+return Glass

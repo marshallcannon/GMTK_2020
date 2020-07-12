@@ -9,7 +9,7 @@ return {
   tilewidth = 32,
   tileheight = 32,
   nextlayerid = 3,
-  nextobjectid = 3,
+  nextobjectid = 4,
   properties = {},
   tilesets = {
     {
@@ -32,7 +32,7 @@ return {
       },
       properties = {},
       terrains = {},
-      tilecount = 4,
+      tilecount = 6,
       tiles = {
         {
           id = 0,
@@ -55,6 +55,18 @@ return {
         {
           id = 3,
           image = "../../assets/images/battery.png",
+          width = 32,
+          height = 32
+        },
+        {
+          id = 4,
+          image = "../../assets/images/spikesTop.png",
+          width = 32,
+          height = 32
+        },
+        {
+          id = 5,
+          image = "../../assets/images/spikesBottom.png",
           width = 32,
           height = 32
         }
@@ -125,6 +137,20 @@ return {
           height = 32,
           rotation = 0,
           gid = 4,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 3,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 256,
+          y = 288,
+          width = 32,
+          height = 32,
+          rotation = 0,
+          gid = 6,
           visible = true,
           properties = {}
         }

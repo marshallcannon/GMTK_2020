@@ -43,7 +43,7 @@ function Alien:update (dt)
   local selfX, selfY = self.x + self.hitbox.width / 2, self.y + self.hitbox.height / 2
   local marine = self.room.marine
   local marineX, marineY = marine.x + marine.hitbox.width / 2, marine.y + marine.hitbox.height / 2
-  local items = self.room.bumpWorld:querySegment(selfX, selfY, marineX, marineY, function (item) return item.solid end)
+  local items = self.room.bumpWorld:querySegment(selfX, selfY, marineX, marineY, function (item) return item.blocksVision end)
   -- Can see player
   if #items == 0 then
     if selfX > marineX then

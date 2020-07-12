@@ -32,7 +32,7 @@ return {
       },
       properties = {},
       terrains = {},
-      tilecount = 6,
+      tilecount = 7,
       tiles = {
         {
           id = 0,
@@ -69,6 +69,12 @@ return {
           image = "../../assets/images/spikesBottom.png",
           width = 32,
           height = 32
+        },
+        {
+          id = 6,
+          image = "../../assets/images/glass.png",
+          width = 32,
+          height = 32
         }
       }
     }
@@ -90,10 +96,10 @@ return {
       encoding = "lua",
       data = {
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 0, 0, 0, 1, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 1, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 1, 1, 1, 1, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 1, 1, 1, 1, 1, 1,
+        1, 0, 0, 0, 1, 1, 1, 1, 1, 1,
+        1, 0, 0, 0, 0, 0, 1, 0, 0, 1,
+        1, 1, 1, 1, 1, 0, 1, 0, 0, 1,
         1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
         1, 0, 0, 0, 0, 1, 1, 1, 1, 1,
         1, 0, 0, 0, 0, 0, 1, 1, 1, 1,
@@ -159,7 +165,7 @@ return {
           name = "",
           type = "",
           shape = "rectangle",
-          x = 96,
+          x = 64,
           y = 288,
           width = 32,
           height = 32,

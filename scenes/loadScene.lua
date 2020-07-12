@@ -37,6 +37,7 @@ function LoadScene:loadAll ()
   Images.spikesTop = love.graphics.newImage('assets/images/spikesTop.png')
   Images.spikesBottom = love.graphics.newImage('assets/images/spikesBottom.png')
   Images.arrowIcons = love.graphics.newImage('assets/images/arrowIcons.png')
+  Images.glass = love.graphics.newImage('assets/images/glass.png')
 
   Fonts = {}
 
@@ -64,7 +65,7 @@ end
 function LoadScene:loadingDone ()
 
   Game = {}
-  Game.levelIndex = 6
+  Game.levelIndex = 1
 
   SceneManager:remove(self)
   SceneManager:add(GameScenes.Game(LevelOrder[Game.levelIndex]))

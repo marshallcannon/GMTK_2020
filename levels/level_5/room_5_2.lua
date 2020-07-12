@@ -9,7 +9,7 @@ return {
   tilewidth = 32,
   tileheight = 32,
   nextlayerid = 3,
-  nextobjectid = 14,
+  nextobjectid = 15,
   properties = {},
   tilesets = {
     {
@@ -32,7 +32,7 @@ return {
       },
       properties = {},
       terrains = {},
-      tilecount = 6,
+      tilecount = 7,
       tiles = {
         {
           id = 0,
@@ -69,6 +69,12 @@ return {
           image = "../../assets/images/spikesBottom.png",
           width = 32,
           height = 32
+        },
+        {
+          id = 6,
+          image = "../../assets/images/glass.png",
+          width = 32,
+          height = 32
         }
       }
     }
@@ -97,7 +103,7 @@ return {
         1, 1, 1, 0, 0, 0, 0, 0, 0, 1,
         1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
         1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 1, 1, 1, 1, 1, 1, 1,
+        1, 0, 0, 0, 1, 1, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1
       }
     },
@@ -117,7 +123,7 @@ return {
           name = "",
           type = "",
           shape = "rectangle",
-          x = 32,
+          x = 64,
           y = 288,
           width = 32,
           height = 32,
@@ -131,26 +137,12 @@ return {
           name = "",
           type = "",
           shape = "rectangle",
-          x = 160,
+          x = 192,
           y = 96,
           width = 32,
           height = 32,
           rotation = 0,
           gid = 4,
-          visible = true,
-          properties = {}
-        },
-        {
-          id = 11,
-          name = "",
-          type = "",
-          shape = "rectangle",
-          x = 192,
-          y = 256,
-          width = 32,
-          height = 32,
-          rotation = 0,
-          gid = 6,
           visible = true,
           properties = {}
         },
@@ -175,6 +167,20 @@ return {
           shape = "rectangle",
           x = 256,
           y = 256,
+          width = 32,
+          height = 32,
+          rotation = 0,
+          gid = 6,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 14,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 32,
+          y = 288,
           width = 32,
           height = 32,
           rotation = 0,

@@ -30,7 +30,11 @@ function Bullet:update (dt)
   self.y = self.y + self.velocity.y * dt
   self.room.bumpWorld:update(self, self.x, self.y)
 
-  local colliders = self.room.bumpWorld:queryRect(self.x, self.y, self.hitbox.width, self.hitbox.height)
+  local colliders = self.room.bumpWorld:queryRect(self.x, self.y, self.hitbox.width, self.hitbox.height, function (item)
+    if item.name == 'block' or item.name == 'alien' then
+      return true
+    end
+  end)
   for i = 1, #colliders do
     if colliders[i].mortal then
       colliders[i]:kill()
@@ -44,7 +48,7 @@ function Bullet:update (dt)
       end
     end
   end
-  if #colliders > 1 then
+  if #colliders > 0 then
     self.dead = true
   end
 

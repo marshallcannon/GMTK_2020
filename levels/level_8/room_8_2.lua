@@ -32,7 +32,7 @@ return {
       },
       properties = {},
       terrains = {},
-      tilecount = 7,
+      tilecount = 6,
       tiles = {
         {
           id = 0,
@@ -69,12 +69,6 @@ return {
           image = "../../assets/images/spikesBottom.png",
           width = 32,
           height = 32
-        },
-        {
-          id = 6,
-          image = "../../assets/images/glass.png",
-          width = 32,
-          height = 32
         }
       }
     }
@@ -97,12 +91,12 @@ return {
       data = {
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 1, 1, 1, 1, 1, 1, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 1, 1, 1, 0, 0, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1
       }
@@ -123,8 +117,36 @@ return {
           name = "",
           type = "",
           shape = "rectangle",
-          x = 256,
+          x = 32,
+          y = 128,
+          width = 32,
+          height = 32,
+          rotation = 0,
+          gid = 3,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 2,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 128,
           y = 224,
+          width = 32,
+          height = 32,
+          rotation = 0,
+          gid = 6,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 3,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 96,
+          y = 128,
           width = 32,
           height = 32,
           rotation = 0,
@@ -133,7 +155,7 @@ return {
           properties = {}
         },
         {
-          id = 2,
+          id = 4,
           name = "",
           type = "",
           shape = "rectangle",
@@ -143,34 +165,6 @@ return {
           height = 32,
           rotation = 0,
           gid = 4,
-          visible = true,
-          properties = {}
-        },
-        {
-          id = 3,
-          name = "",
-          type = "",
-          shape = "rectangle",
-          x = 192,
-          y = 224,
-          width = 32,
-          height = 32,
-          rotation = 0,
-          gid = 6,
-          visible = true,
-          properties = {}
-        },
-        {
-          id = 4,
-          name = "",
-          type = "",
-          shape = "rectangle",
-          x = 96,
-          y = 224,
-          width = 32,
-          height = 32,
-          rotation = 0,
-          gid = 6,
           visible = true,
           properties = {}
         }
