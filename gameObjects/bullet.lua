@@ -32,7 +32,7 @@ function Bullet:update (dt)
   local colliders = self.scene.bumpWorld:queryRect(self.x, self.y, self.hitbox.width, self.hitbox.height)
   for i = 1, #colliders do
     if colliders[i].mortal then
-      colliders[i].dead = true
+      colliders[i]:kill()
     end
   end
   if #colliders > 1 then

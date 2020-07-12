@@ -2,9 +2,9 @@ local Class = require 'libraries/class'
 
 local Alien = Class {
   hitbox = {
-    x = 0, y = 0,
-    width = 32,
-    height = 32
+    x = 5, y = 3,
+    width = 22,
+    height = 29
   },
   solid = false,
   hostile = true,
@@ -22,10 +22,13 @@ function Alien:init (room, x, y)
     y = 0
   }
   
-  self.gravity = 800
+  self.gravity = 400
   self.acceleration = 300
   self.maxSpeed = 100
   self.onGround = true
+
+  self.floatOffset = 0
+  self:floatDown()
 
 end
 
@@ -85,7 +88,7 @@ end
 function Alien:draw ()
 
   love.graphics.setColor(1, 1, 1)
-  love.graphics.draw(Images.alien, self.x - self.hitbox.x, self.y - self.hitbox.y)
+  love.graphics.draw(Images.alien, self.x - self.hitbox.x, self.y - self.hitbox.y, 0, 1, 1, 0, self.floatOffset)
 
 end
 
@@ -96,6 +99,29 @@ function Alien:hitGround ()
   end
   self.onGround = true
 
+end
+
+function Alien:kill ()
+
+  Timer.cancel(self.floatTween)
+  self.dead = true
+
+end
+
+function Alien:floatDown()
+
+  self.floatTween = Timer.tween(1, self, { floatOffset = -5 }, 'in-out-quad', function ()
+    self:floatUp()
+  end)
+
+end
+
+function Alien:floatUp ()
+
+  self.floatTween = Timer.tween(1, self, { floatOffset = 0 }, 'in-out-quad', function ()
+    self:floatDown()
+  end)
+  
 end
 
 return Alien

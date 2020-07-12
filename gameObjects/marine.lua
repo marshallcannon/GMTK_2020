@@ -3,10 +3,10 @@ local Bullet = require 'gameObjects/bullet'
 
 local Marine = Class {
   hitbox = {
-    x = 9,
-    y = 2,
-    width = 14,
-    height = 30
+    x = 10,
+    y = 6,
+    width = 12,
+    height = 23
   }
 }
 
@@ -92,12 +92,7 @@ end
 
 function Marine:draw ()
 
-  if self.onGround then
-
-    love.graphics.setColor(1, 1, 1)
-  else
-    love.graphics.setColor(1, 0, 0)
-  end
+  love.graphics.setColor(1, 1, 1)
   local scaleX, offsetX
   if self.directionFacing == 'left' then
     scaleX = 1
@@ -109,10 +104,10 @@ function Marine:draw ()
   love.graphics.draw(Images.marine, self.x - self.hitbox.x, self.y - self.hitbox.y, 0, scaleX, 1, offsetX)
 
   -- Debugging
-  local x, y, w, h = self.room.bumpWorld:getRect(self)
-  love.graphics.setColor(1, 1, 1)
-  love.graphics.setLineWidth(1)
-  love.graphics.rectangle('line', x, y, w, h)
+  -- local x, y, w, h = self.room.bumpWorld:getRect(self)
+  -- love.graphics.setColor(1, 1, 1)
+  -- love.graphics.setLineWidth(1)
+  -- love.graphics.rectangle('line', x, y, w, h)
 
 end
 
@@ -223,7 +218,7 @@ end
 
 function Marine:grabBattery (battery)
 
-  battery.dead = true
+  battery:kill()
   self.room:checkRunOver()
 
 end

@@ -2,9 +2,9 @@ local Class = require 'libraries/class'
 
 local Battery = Class {
   hitbox = {
-    x = 6, y = 6,
-    width = 22,
-    height = 21
+    x = 4, y = 3,
+    width = 25,
+    height = 25
   },
   solid = false,
   name = 'battery',
@@ -17,12 +17,38 @@ function Battery:init (room, x, y)
   self.x = x
   self.y = y
 
+  self.floatOffset = 0
+  self:floatDown()
+
 end
 
 function Battery:draw ()
 
   love.graphics.setColor(1, 1, 1)
-  love.graphics.draw(Images.battery, self.x, self.y)
+  love.graphics.draw(Images.battery, self.x, self.y, 0, 1, 1, 0, self.floatOffset)
+
+end
+
+function Battery:floatDown()
+
+  self.floatTween = Timer.tween(1.5, self, { floatOffset = -3 }, 'in-out-quad', function ()
+    self:floatUp()
+  end)
+
+end
+
+function Battery:floatUp ()
+
+  self.floatTween = Timer.tween(1.5, self, { floatOffset = 0 }, 'in-out-quad', function ()
+    self:floatDown()
+  end)
+
+end
+
+function Battery:kill ()
+
+  self.dead = true
+  Timer.cancel(self.floatTween)
 
 end
 

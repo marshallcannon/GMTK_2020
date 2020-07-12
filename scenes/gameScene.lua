@@ -398,7 +398,7 @@ function GameScene:goToNextLevel ()
 
   Timer.after(0.5, function ()
     SceneManager:remove(self)
-    SceneManager:add(GameScenes.Game(LevelOrder[Game.levelIndex]))
+    SceneManager:add(GameScenes.Game(LevelOrder[Game.levelIndex]), 1)
   end)
 
 end
