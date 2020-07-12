@@ -211,13 +211,14 @@ end
 
 function Room:draw (x, y)
 
+  if self.background then
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.draw(self.background, 0, 0)
+  end
+
   for i = 1, #self.objects do
     self.objects[i]:draw()
   end
-
-  love.graphics.setColor(232/255, 232/255, 232/255)
-  love.graphics.setLineWidth(2)
-  love.graphics.rectangle('line', 0, 0, 320, 320)
 
   if not self.recording and not self.playingBack then
     if self.countdownText then
@@ -273,6 +274,14 @@ function Room:draw (x, y)
       end
     end
   end
+
+  if self.scene.selectedRoom == self then
+    love.graphics.setColor(232/255, 232/255, 232/255)
+  else
+    love.graphics.setColor(232/255, 232/255, 232/255, 0.5)
+  end
+  love.graphics.setLineWidth(2)
+  love.graphics.rectangle('line', 0, 0, 320, 320)
 
 end
 
@@ -618,6 +627,12 @@ end
 function Room:resetCompletionTime ()
 
   self.completionTime = nil
+
+end
+
+function Room:setBackground (background)
+
+  self.background = background
 
 end
 

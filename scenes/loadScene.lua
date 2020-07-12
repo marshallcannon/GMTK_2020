@@ -31,6 +31,9 @@ function LoadScene:loadAll ()
   Images.lockArrowRight = love.graphics.newImage('assets/images/lockArrowRight.png')
   Images.lockArrowUp = love.graphics.newImage('assets/images/lockArrowUp.png')
   Images.lockArrowDown = love.graphics.newImage('assets/images/lockArrowDown.png')
+  Images.tutorial_1 = love.graphics.newImage('assets/images/tutorial_1.png')
+  Images.tutorial_2 = love.graphics.newImage('assets/images/tutorial_2.png')
+  Images.tutorial_3 = love.graphics.newImage('assets/images/tutorial_3.png')
 
   Fonts = {}
 
@@ -45,7 +48,7 @@ end
 function LoadScene:loadingDone ()
 
   Game = {}
-  Game.levelIndex = 2
+  Game.levelIndex = 1
 
   SceneManager:remove(self)
   SceneManager:add(GameScenes.Game(LevelOrder[Game.levelIndex]))

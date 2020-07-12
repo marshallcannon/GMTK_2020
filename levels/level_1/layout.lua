@@ -7,5 +7,8 @@ return {
   },
   locks = {
     {nil, nil, nil}
+  },
+  backgrounds = {
+    {'tutorial_1', 'tutorial_2', 'tutorial_3'}
   }
 }

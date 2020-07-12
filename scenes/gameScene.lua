@@ -186,6 +186,10 @@ function GameScene:createRooms (layout, roomMaps)
       rooms[row][column] = newRoom
       sortedRooms[roomCount] = newRoom
       roomCount = roomCount + 1
+      -- Custom backgrounds
+      if layout.backgrounds and layout.backgrounds[row] and layout.backgrounds[row][column] then
+        newRoom:setBackground(Images[layout.backgrounds[row][column]])
+      end
     end
   end
 
