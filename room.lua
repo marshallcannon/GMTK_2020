@@ -520,6 +520,11 @@ function Room:checkComplete ()
         return false
       end
     end
+    if object.name == 'alien' then
+      if not object.dead then
+        return false
+      end
+    end
   end
 
   return true
