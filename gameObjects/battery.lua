@@ -18,20 +18,20 @@ function Battery:init (room, x, y)
   self.y = y
 
   self.floatOffset = 0
-  self:floatDown()
+  self:floatUp()
 
 end
 
 function Battery:draw ()
 
   love.graphics.setColor(1, 1, 1)
-  love.graphics.draw(Images.battery, self.x, self.y, 0, 1, 1, 0, self.floatOffset)
+  love.graphics.draw(Images.battery, self.x - self.hitbox.x, self.y - self.hitbox.y, 0, 1, 1, 0, self.floatOffset)
 
 end
 
 function Battery:floatDown()
 
-  self.floatTween = Timer.tween(1.5, self, { floatOffset = -3 }, 'in-out-quad', function ()
+  self.floatTween = Timer.tween(1.5, self, { floatOffset = 0 }, 'in-out-quad', function ()
     self:floatUp()
   end)
 
@@ -39,7 +39,7 @@ end
 
 function Battery:floatUp ()
 
-  self.floatTween = Timer.tween(1.5, self, { floatOffset = 0 }, 'in-out-quad', function ()
+  self.floatTween = Timer.tween(1.5, self, { floatOffset = 3 }, 'in-out-quad', function ()
     self:floatDown()
   end)
 

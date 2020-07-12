@@ -311,11 +311,22 @@ function Room:keyreleased (key)
 
 end
 
-function Room:addObject (object)
+function Room:addObject (object, adjustPosition)
+
+  if adjustPosition == nil then
+    adjustPosition = true
+  end
 
   table.insert(self.objects, object)
   if object.hitbox then
-    self.bumpWorld:add(object, object.x + object.hitbox.x, object.y + object.hitbox.y,
+    if adjustPosition then
+      -- Snap to ground
+      object.y = object.y + object.hitbox.y + (32 - (object.hitbox.y +  object.hitbox.height))
+      -- Put in center
+      object.x = object.x + object.hitbox.x
+    end
+    -- Add to collisions
+    self.bumpWorld:add(object, object.x, object.y,
       object.hitbox.width, object.hitbox.height)
   end
 
@@ -358,7 +369,7 @@ function Room:buildRoom (roomMap)
     local y = object.y - 32
     if object.gid == 2 then
       -- The marine needs to start in the center of its tile
-      local marine = Marine(self, x + 16 - Marine.hitbox.width / 2, y)
+      local marine = Marine(self, x, y)
       self:addObject(marine)
       self.marine = marine
     elseif object.gid == 3 then

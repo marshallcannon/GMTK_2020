@@ -28,7 +28,7 @@ function Alien:init (room, x, y)
   self.onGround = true
 
   self.floatOffset = 0
-  self:floatDown()
+  self:floatUp()
 
 end
 
@@ -110,7 +110,7 @@ end
 
 function Alien:floatDown()
 
-  self.floatTween = Timer.tween(1, self, { floatOffset = -5 }, 'in-out-quad', function ()
+  self.floatTween = Timer.tween(1, self, { floatOffset = 0 }, 'in-out-quad', function ()
     self:floatUp()
   end)
 
@@ -118,10 +118,10 @@ end
 
 function Alien:floatUp ()
 
-  self.floatTween = Timer.tween(1, self, { floatOffset = 0 }, 'in-out-quad', function ()
+  self.floatTween = Timer.tween(1, self, { floatOffset = 4 }, 'in-out-quad', function ()
     self:floatDown()
   end)
-  
+
 end
 
 return Alien

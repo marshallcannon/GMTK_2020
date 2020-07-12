@@ -109,6 +109,9 @@ function Marine:draw ()
   -- love.graphics.setLineWidth(1)
   -- love.graphics.rectangle('line', x, y, w, h)
 
+  -- love.graphics.setColor(0, 1, 0)
+  -- love.graphics.rectangle('line', self.x - self.hitbox.x, self.y - self.hitbox.y, Images.marine:getWidth(), Images.marine:getHeight())
+
 end
 
 function Marine:jump ()
@@ -123,16 +126,16 @@ function Marine:shoot ()
 
   local x, direction
   if self.directionFacing == 'left' then
-    x = self.x - 15
+    x = self.x - Bullet.hitbox.width - 5
     direction = -1
   elseif self.directionFacing == 'right' then
     x = self.x + self.hitbox.width + 5
     direction = 1
   end
-  local y = self.y + self.hitbox.height / 2 - 10
+  local y = self.y + self.hitbox.height / 2 - Bullet.hitbox.height
 
   local bullet = Bullet(self.room, x, y, direction)
-  self.room:addObject(bullet)
+  self.room:addObject(bullet, false)
 
   self.bullets = self.bullets - 1
 
