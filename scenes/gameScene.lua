@@ -83,15 +83,6 @@ function GameScene:draw ()
     room:draw()
     love.graphics.translate(-room.x, -room.y)
   end
-  -- for y = 1, #self.rooms do
-  --   for x = 1, #self.rooms[y] do
-  --     local roomX = (x - 1) * self.roomWidth
-  --     local roomY = (y - 1) * self.roomHeight
-  --     love.graphics.translate(roomX, roomY)
-  --     self.rooms[y][x]:draw()
-  --     love.graphics.translate(-roomX, -roomY)
-  --   end
-  -- end
 
   -- self:drawLockArrows()
 
@@ -249,11 +240,15 @@ function GameScene:createRooms (layout, roomMaps)
   end
 
   -- Lock timelines
-  for row = 1, #rooms do
-    for column = 1, #rooms[row] do
+  print('locking timelins')
+  for row = 1, #layout.locks do
+    print('row: ' .. row)
+    print('row length: ' .. #rooms[row])
+    for column = 1, #layout.locks[row] do
+      print('column: ' .. column)
       local room = rooms[row][column]
       local lockedTimeline = layout.locks[row][column]
-      if room and lockedTimeline then
+      if room and type(lockedTimeline) == 'string' then
         room:lockTimeline(lockedTimeline)
       end
     end
