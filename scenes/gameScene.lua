@@ -81,6 +81,10 @@ function GameScene:draw ()
     local room = self.roomOrder[i]
     love.graphics.translate(room.x, room.y)
     room:draw()
+    if room == self.selectedRoom and not self.activeRoom and not self.finalPlayback then
+      love.graphics.setColor(1, 1, 1)
+      love.graphics.draw(Images.arrowIcons, 160 - 50, -50)
+    end
     love.graphics.translate(-room.x, -room.y)
   end
 

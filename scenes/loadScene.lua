@@ -36,6 +36,7 @@ function LoadScene:loadAll ()
   Images.tutorial_3 = love.graphics.newImage('assets/images/tutorial_3.png')
   Images.spikesTop = love.graphics.newImage('assets/images/spikesTop.png')
   Images.spikesBottom = love.graphics.newImage('assets/images/spikesBottom.png')
+  Images.arrowIcons = love.graphics.newImage('assets/images/arrowIcons.png')
 
   Fonts = {}
 
