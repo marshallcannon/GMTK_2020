@@ -26,6 +26,11 @@ function LoadScene:loadAll ()
   Images.tiledBackground = love.graphics.newImage('assets/images/tiledBackground.png')
   Images.timelineBackground = love.graphics.newImage('assets/images/timelineBackground.png')
   Images.timelineTrack = love.graphics.newImage('assets/images/timelineTrack.png')
+  Images.timelineTrackLock = love.graphics.newImage('assets/images/timelineTrackLock.png')
+  Images.lockArrowLeft = love.graphics.newImage('assets/images/lockArrowLeft.png')
+  Images.lockArrowRight = love.graphics.newImage('assets/images/lockArrowRight.png')
+  Images.lockArrowUp = love.graphics.newImage('assets/images/lockArrowUp.png')
+  Images.lockArrowDown = love.graphics.newImage('assets/images/lockArrowDown.png')
 
   Fonts = {}
 
@@ -40,7 +45,7 @@ end
 function LoadScene:loadingDone ()
 
   Game = {}
-  Game.levelIndex = 1
+  Game.levelIndex = 2
 
   SceneManager:remove(self)
   SceneManager:add(GameScenes.Game(LevelOrder[Game.levelIndex]))

@@ -80,7 +80,10 @@ function GameScene:draw ()
     end
   end
 
+  -- self:drawLockArrows()
+
   self.camera:detach()
+
 
   self.timelineDisplay:draw()
 
@@ -414,6 +417,52 @@ function GameScene:drawBackground ()
       x = x + 32
     end
     y = y + 32
+  end
+
+end
+
+-- Unfinished
+function GameScene:drawLockArrows ()
+
+  love.graphics.setColor(1, 1, 1, 0.5)
+  for i = 2, #self.roomOrder do
+    local room = self.roomOrder[i]
+    local priorRoom = room.priorRoom
+    local icons = room:getLockedIcons()
+    local arrowSide = self:getRoomDirection (priorRoom, room)
+    if arrowSide == 'left' then
+      local centerX = room.x + room.width
+      local centerY = room.y + room.height / 2
+      for i = 1, #icons do
+        love.graphics.draw(Images.lockArrowLeft, centerX, centerY, 0, 1, 1, 41)
+        love.graphics.draw(icons[1], centerX, centerY, 0, 0.5, 0.5, 41)
+      end
+    elseif arrowSide == 'right' then
+      local centerX = room.x
+      local centerY = room.y + room.height / 2
+      for i = 1, #icons do
+        love.graphics.draw(Images.lockArrowRight, centerX, centerY, 0, 1, 1, 26, 26)
+        love.graphics.draw(icons[1], centerX, centerY, 0, 1, 1, 26, 26)
+      end
+    elseif arrowSide == 'up' then
+
+    elseif arrowSide == 'down' then
+
+    end
+  end
+
+end
+
+function GameScene:getRoomDirection (room1, room2)
+
+  if room2.x < room1.x then
+    return 'left'
+  elseif room2.x > room1.x then
+    return 'right'
+  elseif room2.y < room1.y then
+    return 'up'
+  elseif room2.y > room1.y then
+    return 'down'
   end
 
 end

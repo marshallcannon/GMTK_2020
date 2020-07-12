@@ -40,6 +40,10 @@ function TimelineDisplay:draw ()
     love.graphics.setColor(Colors.SteelTeal)
     love.graphics.rectangle('fill', x, y, width, height - 3, 4, 4)
   end
+  if self.room.lockedJumping then
+    love.graphics.setColor(1, 1, 1, 0.5)
+    love.graphics.draw(Images.timelineTrackLock, self.x + 100, self.y + yOffset)
+  end
 
   -- Movements
   yOffset = 61
@@ -79,6 +83,10 @@ function TimelineDisplay:draw ()
     end
     love.graphics.rectangle('fill', x, y, width, height - 3, 4, 4)
   end
+  if self.room.lockedMovement then
+    love.graphics.setColor(1, 1, 1, 0.5)
+    love.graphics.draw(Images.timelineTrackLock, self.x + 100, self.y + yOffset)
+  end
 
   -- Shooting
   yOffset = 116
@@ -98,6 +106,10 @@ function TimelineDisplay:draw ()
     love.graphics.rectangle('fill', x, y, width, height, 4, 4)
     love.graphics.setColor(Colors.Auburn)
     love.graphics.rectangle('fill', x, y, width, height - 3, 4, 4)
+  end
+  if self.room.lockedShooting then
+    love.graphics.setColor(1, 1, 1, 0.5)
+    love.graphics.draw(Images.timelineTrackLock, self.x + 100, self.y + yOffset)
   end
 
   -- Playback marker

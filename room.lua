@@ -250,7 +250,6 @@ function Room:draw (x, y)
         end
         -- Locked timeline indication
         local lockedIcons = self:getLockedIcons()
-        love.graphics.setColor(1, 1, 1)
         for i = 1, #lockedIcons do
           local x = self.width / 2
           if #lockedIcons == 1 or #lockedIcons == 3 then
@@ -261,7 +260,9 @@ function Room:draw (x, y)
             x = x - 100 + i * 50
           end
           local y = self.height / 2 - lockedIcons[i]:getHeight() / 2
+          love.graphics.setColor(1, 1, 1)
           love.graphics.draw(Images.lock, x, y, 0, 1, 1, 25)
+          love.graphics.setColor(1, 1, 1, 0.75)
           love.graphics.draw(lockedIcons[i], x, y, 0, 0.5, 0.5, 25, -25)
         end
         -- Overlay text
