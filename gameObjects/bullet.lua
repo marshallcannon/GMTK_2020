@@ -52,6 +52,7 @@ end
 
 function Bullet:draw ()
 
+  love.graphics.setColor(Colors.Platinum)
   love.graphics.draw(Images.bullet, self.x, self.y)
 
 end
