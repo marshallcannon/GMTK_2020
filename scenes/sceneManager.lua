@@ -2,9 +2,10 @@ local SceneManager = {
   sceneList = {}
 }
 
-function SceneManager:add (scene)
+function SceneManager:add (scene, index)
 
-  table.insert(self.sceneList, scene)
+  index = index or #self.sceneList + 1
+  table.insert(self.sceneList, index, scene)
   return scene
 
 end

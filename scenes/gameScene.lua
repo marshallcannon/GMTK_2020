@@ -2,6 +2,7 @@ local Class = require 'libraries/class'
 local Camera = require 'libraries/camera'
 local Room = require 'room'
 local TimelineDisplay = require 'gameObjects/timelineDisplay'
+local LevelOrder = require 'levels/levelOrder'
 
 local GameScene = Class {
   roomWidth = 320,
@@ -48,8 +49,6 @@ function GameScene:update (dt)
       end
     end
   end
-
-  Timer.update(dt)
 
 end
 
@@ -135,7 +134,7 @@ function GameScene:mousepressed (x, y, button)
   if self.nextLevelButton then
     if x >= self.nextLevelButton.x and x <= self.nextLevelButton.x + self.nextLevelButton.image:getWidth() and
       y >= self.nextLevelButton.y and y <= self.nextLevelButton.y + self.nextLevelButton.image:getHeight() then
-      print('next level')
+      self:goToNextLevel()
     end
   end
 
@@ -378,6 +377,18 @@ end
 function GameScene:hideTimeline ()
 
   Timer.tween(0.5, self.timelineDisplay, { y = love.graphics.getHeight() }, 'out-quad')
+
+end
+
+function GameScene:goToNextLevel ()
+
+  Game.levelIndex = Game.levelIndex + 1
+  SceneManager:add(GameScenes.Transition(1))
+
+  Timer.after(0.5, function ()
+    SceneManager:remove(self)
+    SceneManager:add(GameScenes.Game(LevelOrder[Game.levelIndex]))
+  end)
 
 end
 

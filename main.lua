@@ -11,6 +11,7 @@ function love.load ()
   GameScenes = {}
   GameScenes.Load = require 'scenes/loadScene'
   GameScenes.Game = require 'scenes/gameScene'
+  GameScenes.Transition = require 'scenes/transitionScene'
 
   local load = GameScenes.Load()
   SceneManager:add(load)
@@ -19,6 +20,7 @@ function love.load ()
 end
 
 function love.update (dt)
+  Timer.update(dt)
   SceneManager:update(dt)
 end
 

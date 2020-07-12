@@ -1,4 +1,5 @@
 local Class = require 'libraries/class'
+local LevelOrder = require 'levels/levelOrder'
 
 local LoadScene = Class {}
 
@@ -35,8 +36,11 @@ end
 
 function LoadScene:loadingDone ()
 
+  Game = {}
+  Game.levelIndex = 1
+
   SceneManager:remove(self)
-  SceneManager:add(GameScenes.Game('level_1'))
+  SceneManager:add(GameScenes.Game(LevelOrder[Game.levelIndex]))
 
 end
 
