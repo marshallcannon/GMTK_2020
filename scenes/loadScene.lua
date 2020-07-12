@@ -23,6 +23,7 @@ function LoadScene:loadAll ()
   Images.roomComplete = love.graphics.newImage('assets/images/roomComplete.png')
   Images.replayAllButton = love.graphics.newImage('assets/images/replayAllButton.png')
   Images.nextLevelButton = love.graphics.newImage('assets/images/nextLevelButton.png')
+  Images.tiledBackground = love.graphics.newImage('assets/images/tiledBackground.png')
 
   Fonts = {}
 

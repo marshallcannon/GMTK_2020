@@ -26,6 +26,9 @@ function GameScene:init (folderName)
   self:setTimeline(self.selectedRoom)
   self.selectedRoom:unlockRoom()
 
+  self.backgroundX = 0
+  self.backgroundY = 0
+
 end
 
 function GameScene:update (dt)
@@ -50,9 +53,17 @@ function GameScene:update (dt)
     end
   end
 
+  -- Background scroll
+  self.backgroundX = self.backgroundX - dt * 10
+  self.backgroundY = self.backgroundY - dt * 10
+  if self.backgroundX <= -32 then self.backgroundX = self.backgroundX + 32 end
+  if self.backgroundY <= -32 then self.backgroundY = self.backgroundY + 32 end
+
 end
 
 function GameScene:draw ()
+
+  self:drawBackground()
 
   local xOffset = (love.graphics.getWidth() - self.roomWidth * 3) / 2
   local yOffset = (love.graphics.getHeight() - self.roomHeight * 3) / 2
@@ -389,6 +400,21 @@ function GameScene:goToNextLevel ()
     SceneManager:remove(self)
     SceneManager:add(GameScenes.Game(LevelOrder[Game.levelIndex]))
   end)
+
+end
+
+function GameScene:drawBackground ()
+
+  love.graphics.setColor(1, 1, 1)
+  local x, y = self.backgroundX, self.backgroundY
+  while y < love.graphics.getHeight() do
+    x = 0
+    while x < love.graphics.getWidth() do
+      love.graphics.draw(Images.tiledBackground, x, y)
+      x = x + 32
+    end
+    y = y + 32
+  end
 
 end
 
