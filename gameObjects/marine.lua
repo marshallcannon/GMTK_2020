@@ -35,6 +35,8 @@ function Marine:init (room, x, y)
   self.vCompress = 1
   self.hCompress = 1
 
+  self.bulletOpacity = 0
+
 end
 
 function Marine:update (dt)
@@ -109,6 +111,16 @@ function Marine:draw ()
   love.graphics.draw(Images.marine, self.x - self.hitbox.x, self.y - self.hitbox.y, 0, scaleX * self.hCompress,
     self.vCompress, offsetX, -(Images.marine:getHeight() - Images.marine:getHeight() * self.vCompress))
 
+  love.graphics.setColor(1, 1, 1, self.bulletOpacity)
+  love.graphics.setLineWidth(1)
+  for i = 1, 3 do
+    local style
+    if i > self.bullets then style = 'line'
+    else style = 'fill' end
+    local x = self.x + (self.hitbox.width / 2) + ((i - 2) * 12)
+    love.graphics.circle(style, x, self.y - 10, 4)
+  end
+
   -- Debugging
   -- local x, y, w, h = self.room.bumpWorld:getRect(self)
   -- love.graphics.setColor(1, 1, 1)
@@ -129,7 +141,7 @@ function Marine:jump ()
     -- Animation
     self.vCompress = 0.8
     self.hCompress = 1.2
-    Timer.tween(0.25, self, { vCompress = 1.2, hCompress = 0.8 }, 'linear', function ()
+    Timer.tween(0.15, self, { vCompress = 1.2, hCompress = 0.8 }, 'linear', function ()
       Timer.tween(0.25, self, {vCompress = 1, hCompress = 1 }, 'linear')
     end)
 
@@ -160,7 +172,9 @@ function Marine:shoot ()
   local bullet = Bullet(self.room, x, y, direction)
   self.room:addObject(bullet)
 
-  -- self.bullets = self.bullets - 1
+  self.bullets = self.bullets - 1
+  self.bulletOpacity = 1
+  Timer.tween(0.5, self, { bulletOpacity = 0 })
   Sounds.shoot:play()
 
 end
@@ -205,8 +219,8 @@ function Marine:hitGround ()
   self.onGround = true
 
   -- Animation
-  Timer.tween(0.1, self, { vCompress = 0.8, hCompress = 1.2 }, 'linear', function ()
-    Timer.tween(0.1, self, { vCompress = 1, hCompress = 1 })
+  Timer.tween(0.05, self, { vCompress = 0.9, hCompress = 1.1 }, 'linear', function ()
+    Timer.tween(0.05, self, { vCompress = 1, hCompress = 1 })
   end)
 
   -- Particles
