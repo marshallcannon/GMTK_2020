@@ -22,8 +22,8 @@ function Alien:init (room, x, y)
     y = 0
   }
   
-  self.gravity = 400
-  self.acceleration = 300
+  self.gravity = 100
+  self.acceleration = 200
   self.maxSpeed = 100
   self.onGround = true
 
@@ -76,12 +76,20 @@ function Alien:update (dt)
   local goalX = self.x + self.velocity.x * dt
   local goalY = self.y + self.velocity.y * dt
   local actualX, actualY, items = self.room.bumpWorld:move(self, goalX, goalY, function (item, other)
-    if other.solid then
+    if other.solid or other.name == 'alien' then
       return 'slide'
+    elseif other.name == 'spikesTop' or other.name == 'spikesBottom' then
+      return 'cross'
     end
   end)
   self.x = actualX
   self.y = actualY
+
+  for i = 1, #items do
+    if items[i].other.name == 'spikesTop' or items[i].other.name == 'spikesBottom' then
+      self:kill()
+    end
+  end
 
 end
 
