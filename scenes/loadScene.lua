@@ -18,12 +18,14 @@ function LoadScene:loadAll ()
   Images.alien = love.graphics.newImage('assets/images/alien.png')
   Images.movementIcon = love.graphics.newImage('assets/images/movementIcon.png')
   Images.jumpIcon = love.graphics.newImage('assets/images/jumpIcon.png')
-  Images.shootIcon = love.graphics.newImage('assets/images/shootIcon.png')
+  Images.shootIcon = love.graphics.newImage('assets/images/gunIcon.png')
   Images.lock = love.graphics.newImage('assets/images/lock.png')
   Images.roomComplete = love.graphics.newImage('assets/images/roomComplete.png')
   Images.replayAllButton = love.graphics.newImage('assets/images/replayAllButton.png')
   Images.nextLevelButton = love.graphics.newImage('assets/images/nextLevelButton.png')
   Images.tiledBackground = love.graphics.newImage('assets/images/tiledBackground.png')
+  Images.timelineBackground = love.graphics.newImage('assets/images/timelineBackground.png')
+  Images.timelineTrack = love.graphics.newImage('assets/images/timelineTrack.png')
 
   Fonts = {}
 
