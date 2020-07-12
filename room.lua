@@ -611,17 +611,21 @@ function Room:startCountdown ()
 
   -- Countdown
   self.countdownText = love.graphics.newText(Fonts.verminVibes, '3')
+  Sounds.countdown1:play()
   Timer.after(0.33, function ()
     self.countdownText:set('2')
+    Sounds.countdown1:play()
   end)
   Timer.after(0.66, function ()
     self.countdownText:set('1')
+    Sounds.countdown1:play()
   end)
 
   -- Start recording
   Timer.after(1, function ()
     self.countdownText = nil
     self:startRecording()
+    Sounds.countdown2:play()
   end)
 
 end

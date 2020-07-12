@@ -54,6 +54,8 @@ function LoadScene:loadAll ()
   Sounds.jump = love.audio.newSource('assets/soundEffects/jump.ogg', 'static')
   Sounds.select = love.audio.newSource('assets/soundEffects/select.ogg', 'static')
   Sounds.shoot = love.audio.newSource('assets/soundEffects/shoot.ogg', 'static')
+  Sounds.countdown1 = love.audio.newSource('assets/soundEffects/countdown1.ogg', 'static')
+  Sounds.countdown2 = love.audio.newSource('assets/soundEffects/countdown2.ogg', 'static')
 
   self:loadingDone()
 

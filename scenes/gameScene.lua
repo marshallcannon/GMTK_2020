@@ -115,7 +115,7 @@ function GameScene:keypressed (key)
     if key == 'left' or key == 'right' or
     key == 'up' or key == 'down' then
       if not love.keyboard.isDown('r') and not self.finalPlayback then
-        self:scrollRooms (key)
+        self:scrollRooms(key)
       end
     end
     if key == 'tab' then
@@ -314,6 +314,7 @@ function GameScene:scrollRooms (direction)
   local room = self:getAdjacentRoom(direction)
   if room then
     self:scrollToRoom(room)
+    Sounds.select:play()
   end
 
 end
