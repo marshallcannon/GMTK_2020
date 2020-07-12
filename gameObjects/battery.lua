@@ -11,9 +11,9 @@ local Battery = Class {
   collectible = true
 }
 
-function Battery:init (scene, x, y)
+function Battery:init (room, x, y)
 
-  self.scene = scene
+  self.room = room
   self.x = x
   self.y = y
 

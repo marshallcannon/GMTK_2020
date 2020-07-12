@@ -5,6 +5,7 @@ local Timeline = require 'gameObjects/timeline'
 local Marine = require 'gameObjects/marine'
 local Block = require 'gameObjects/block'
 local Battery = require 'gameObjects/battery'
+local Alien = require 'gameObjects/alien'
 
 local Room = Class {
   width = 320,
@@ -51,8 +52,6 @@ end
 
 function Room:update (dt)
 
-  Timer.update(dt)
-
   if self.recording or self.playingBack then
 
     for i = 1, #self.objects do
@@ -85,6 +84,7 @@ function Room:recordUpdate (dt)
   self.runningTime = self.runningTime + dt
   if self.runningTime >= self.maxTime then
     if self:checkComplete() then
+      self.completionTime = self.maxTime
       self:runComplete()
     else
       self:runFailed()
@@ -362,7 +362,8 @@ function Room:buildRoom (roomMap)
       self:addObject(marine)
       self.marine = marine
     elseif object.gid == 3 then
-      -- alien
+      local alien = Alien(self, x, y)
+      self:addObject(alien)
     elseif object.gid == 4 then
       local battery = Battery(self, x, y)
       self:addObject(battery)
@@ -473,6 +474,8 @@ function Room:checkRunOver ()
 
   if self:checkComplete() then
 
+    self.completionTime = self.runningTime
+
     Timer.after(0.5, function ()
       if self.status ~= 'complete' then 
         self:runComplete()
@@ -568,15 +571,15 @@ function Room:startCountdown ()
 
   -- Countdown
   self.countdownText = love.graphics.newText(Fonts.verminVibes, '3')
-  Timer.after(0.5, function ()
+  Timer.after(0.33, function ()
     self.countdownText:set('2')
   end)
-  Timer.after(1, function ()
+  Timer.after(0.66, function ()
     self.countdownText:set('1')
   end)
 
   -- Start recording
-  Timer.after(1.5, function ()
+  Timer.after(1, function ()
     self.countdownText = nil
     self:startRecording()
   end)
@@ -597,6 +600,12 @@ function Room:getLockedIcons ()
   end
 
   return icons
+
+end
+
+function Room:resetCompletionTime ()
+
+  self.completionTime = nil
 
 end
 

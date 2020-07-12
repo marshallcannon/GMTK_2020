@@ -41,7 +41,9 @@ end
 function SceneManager:keypressed (key)
 
   for i = 1, #self.sceneList do
-    self.sceneList[i]:keypressed(key)
+    if self.sceneList[i].keypressed then
+      self.sceneList[i]:keypressed(key)
+    end
   end
 
 end
@@ -49,7 +51,19 @@ end
 function SceneManager:keyreleased (key)
 
   for i = 1, #self.sceneList do
-    self.sceneList[i]:keyreleased(key)
+    if self.sceneList[i].keyreleased then
+      self.sceneList[i]:keyreleased(key)
+    end
+  end
+
+end
+
+function SceneManager:mousepressed (x, y, button)
+
+  for i = 1, #self.sceneList do
+    if self.sceneList[i].mousepressed then
+      self.sceneList[i]:mousepressed(x, y, button)
+    end
   end
 
 end

@@ -1,5 +1,4 @@
 local Class = require 'libraries/class'
-local Timer = require 'libraries/timer'
 local Camera = require 'libraries/camera'
 local Room = require 'room'
 local TimelineDisplay = require 'gameObjects/timelineDisplay'
@@ -75,6 +74,16 @@ function GameScene:draw ()
 
   self.timelineDisplay:draw()
 
+  if self.replayButton then
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.draw(self.replayButton.image, self.replayButton.x, self.replayButton.y)
+  end
+
+  if self.nextLevelButton then
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.draw(self.nextLevelButton.image, self.nextLevelButton.x, self.nextLevelButton.y)
+  end
+
 end
 
 function GameScene:keypressed (key)
@@ -109,6 +118,24 @@ function GameScene:keyreleased (key)
   else
     if key == 'r' then
       self.selectedRoom.resetTimer = 0
+    end
+  end
+
+end
+
+function GameScene:mousepressed (x, y, button)
+
+  if self.replayButton then
+    if x >= self.replayButton.x and x <= self.replayButton.x + self.replayButton.image:getWidth() and
+      y >= self.replayButton.y and y <= self.replayButton.y + self.replayButton.image:getHeight() then
+      self:playAllRooms()
+    end
+  end
+
+  if self.nextLevelButton then
+    if x >= self.nextLevelButton.x and x <= self.nextLevelButton.x + self.nextLevelButton.image:getWidth() and
+      y >= self.nextLevelButton.y and y <= self.nextLevelButton.y + self.nextLevelButton.image:getHeight() then
+      print('next level')
     end
   end
 
@@ -269,8 +296,15 @@ function GameScene:roomComplete ()
     self.activeRoom.nextRoom:unlockRoom()
     self:scrollToRoom(self.activeRoom.nextRoom)
   else
+    -- All levels complete
+    self:hideTimeline()
     self:zoomOut()
     self:playAllRooms()
+
+    local maxRuntime = self:getLongestCompletionTime()
+    Timer.after(maxRuntime + 0.5, function ()
+      self:showEndButtons()
+    end)
   end
   self.activeRoom = nil
 
@@ -288,6 +322,7 @@ function GameScene:resetToRoom (resetRoom)
     local room = self.roomOrder[i]
     room:stop()
     room:reset()
+    room:resetCompletionTime()
     if room == resetRoom then
       room:softClearTimeline()
       room:unlockRoom()
@@ -305,9 +340,44 @@ end
 function GameScene:playAllRooms ()
 
   for i = 1, #self.roomOrder do
+    self.roomOrder[i]:reset()
     self.roomOrder[i]:startPlayback()
   end
   self.finalPlayback = true
+
+end
+
+function GameScene:getLongestCompletionTime ()
+
+  local time = 0
+  for i = 1, #self.roomOrder do
+    time = math.max(time, self.roomOrder[i].completionTime)
+  end
+  return time
+
+end
+
+function GameScene:showEndButtons ()
+
+  self.replayButton = {
+    image = Images.replayAllButton,
+    x = love.graphics.getWidth() / 2 - Images.replayAllButton:getWidth() - 25,
+    y = love.graphics.getHeight(),
+  }
+  Timer.tween(0.5, self.replayButton, { y = love.graphics.getHeight() - Images.replayAllButton:getHeight() - 50 }, 'out-quad')
+
+  self.nextLevelButton = {
+    image = Images.nextLevelButton,
+    x = love.graphics.getWidth() / 2 + 25,
+    y = love.graphics.getHeight()
+  }
+  Timer.tween(0.5, self.nextLevelButton, { y = love.graphics.getHeight() - Images.nextLevelButton:getHeight() - 50 }, 'out-quad')
+
+end
+
+function GameScene:hideTimeline ()
+
+  Timer.tween(0.5, self.timelineDisplay, { y = love.graphics.getHeight() }, 'out-quad')
 
 end
 

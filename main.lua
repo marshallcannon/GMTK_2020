@@ -1,4 +1,5 @@
 Colors = require 'colors'
+Timer = require 'libraries/timer'
 
 function love.load ()
 
@@ -18,25 +19,21 @@ function love.load ()
 end
 
 function love.update (dt)
-
   SceneManager:update(dt)
-
 end
 
 function love.draw ()
-
   SceneManager:draw()
-
 end
 
 function love.keypressed (key)
-
   SceneManager:keypressed(key)
-
 end
 
 function love.keyreleased (key)
-
   SceneManager:keyreleased(key)
+end
 
+function love.mousepressed (x, y, button)
+  SceneManager:mousepressed(x, y, button)
 end

@@ -10,9 +10,9 @@ local Marine = Class {
   }
 }
 
-function Marine:init (scene, x, y)
+function Marine:init (room, x, y)
 
-  self.room = scene
+  self.room = room
   self.x = x
   self.y = y
   self.velocity = {
@@ -65,6 +65,10 @@ function Marine:update (dt)
   for i = 1, #collisions do
     if collisions[i].other.name == 'battery' then
       self:grabBattery(collisions[i].other)
+    end
+    if collisions[i].other.hostile then
+      print('hurt!')
+      self.room:runFailed()
     end
   end
 
@@ -124,10 +128,10 @@ function Marine:shoot ()
 
   local x, direction
   if self.directionFacing == 'left' then
-    x = self.x - 25
+    x = self.x - 15
     direction = -1
   elseif self.directionFacing == 'right' then
-    x = self.x + self.hitbox.width + 5 + 15
+    x = self.x + self.hitbox.width + 5
     direction = 1
   end
   local y = self.y + self.hitbox.height / 2 - 10
@@ -205,7 +209,7 @@ function Marine.shouldCollide (item, other)
 
   if other.solid then
     return 'slide'
-  elseif other.collectible then
+  elseif other.collectible or other.hostile then
     return 'cross'
   end
 
