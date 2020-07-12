@@ -67,8 +67,7 @@ function Marine:update (dt)
       self:grabBattery(collisions[i].other)
     end
     if collisions[i].other.hostile then
-      print('hurt!')
-      self.room:runFailed()
+      self.dead = true
     end
   end
 

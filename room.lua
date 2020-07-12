@@ -77,6 +77,10 @@ function Room:update (dt)
     end
   end
 
+  if self.marine.dead then
+    self:runFailed()
+  end
+
 end
 
 function Room:recordUpdate (dt)
