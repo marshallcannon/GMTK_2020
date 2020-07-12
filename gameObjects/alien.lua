@@ -106,6 +106,7 @@ function Alien:kill ()
   Timer.cancel(self.floatTween)
   self.dead = true
   self.room:checkRunOver()
+  Sounds.explosion:play()
 
 end
 

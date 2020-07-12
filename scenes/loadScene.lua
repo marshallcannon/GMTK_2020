@@ -46,6 +46,15 @@ function LoadScene:loadAll ()
   Fonts.verminVibesBig = love.graphics.newFont('assets/fonts/Vermin_Vibes_1989.ttf', 64, 'mono')
   Fonts.verminVibesMedium = love.graphics.newFont('assets/fonts/Vermin_Vibes_1989.ttf', 32, 'mono')
 
+  Sounds = {}
+
+  Sounds.death = love.audio.newSource('assets/soundEffects/death.ogg', 'static')
+  Sounds.explosion = love.audio.newSource('assets/soundEffects/explosion.ogg', 'static')
+  Sounds.grab = love.audio.newSource('assets/soundEffects/grab.ogg', 'static')
+  Sounds.jump = love.audio.newSource('assets/soundEffects/jump.ogg', 'static')
+  Sounds.select = love.audio.newSource('assets/soundEffects/select.ogg', 'static')
+  Sounds.shoot = love.audio.newSource('assets/soundEffects/shoot.ogg', 'static')
+
   self:loadingDone()
 
 end

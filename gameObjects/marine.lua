@@ -68,6 +68,7 @@ function Marine:update (dt)
     end
     if collisions[i].other.hostile then
       self.dead = true
+      Sounds.death:play()
     end
   end
 
@@ -117,6 +118,7 @@ function Marine:jump ()
 
   if self.onGround then
     self.velocity.y = -self.jumpPower
+    Sounds.jump:play()
   end
 
 end
@@ -136,7 +138,8 @@ function Marine:shoot ()
   local bullet = Bullet(self.room, x, y, direction)
   self.room:addObject(bullet)
 
-  self.bullets = self.bullets - 1
+  -- self.bullets = self.bullets - 1
+  Sounds.shoot:play()
 
 end
 
@@ -222,6 +225,7 @@ function Marine:grabBattery (battery)
 
   battery:kill()
   self.room:checkRunOver()
+  Sounds.grab:play()
 
 end
 
