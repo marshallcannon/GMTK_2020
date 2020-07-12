@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.5" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="3" nextobjectid="3">
+<map version="1.2" tiledversion="1.3.5" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="3" nextobjectid="7">
+ <editorsettings>
+  <export target="room_5_5.lua" format="lua"/>
+ </editorsettings>
  <tileset firstgid="1" source="../allTiles.tsx"/>
  <layer id="1" name="Tile Layer 1" width="10" height="10">
   <data encoding="csv">
@@ -7,16 +10,18 @@
 1,0,0,0,0,0,0,0,0,1,
 1,0,0,0,0,0,0,0,0,1,
 1,0,0,0,0,0,0,0,0,1,
-1,0,0,0,0,0,0,0,0,1,
-1,0,0,0,0,0,0,0,0,1,
-1,0,0,0,0,0,0,0,0,1,
-1,0,0,0,0,0,0,0,0,1,
-1,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,1,1,
+1,1,1,1,0,0,0,0,0,1,
+1,0,0,0,0,0,1,1,1,1,
+1,0,0,0,0,1,1,1,1,1,
+1,0,0,0,1,1,1,1,1,1,
 1,1,1,1,1,1,1,1,1,1
 </data>
  </layer>
  <objectgroup id="2" name="Object Layer 1">
-  <object id="1" gid="2" x="256" y="288" width="32" height="32"/>
-  <object id="2" gid="4" x="32" y="288" width="32" height="32"/>
+  <object id="3" gid="6" x="256" y="192" width="32" height="32"/>
+  <object id="4" gid="6" x="224" y="192" width="32" height="32"/>
+  <object id="5" gid="4" x="32" y="160" width="32" height="32"/>
+  <object id="6" gid="2" x="32" y="288" width="32" height="32"/>
  </objectgroup>
 </map>

@@ -9,7 +9,7 @@ return {
   tilewidth = 32,
   tileheight = 32,
   nextlayerid = 3,
-  nextobjectid = 3,
+  nextobjectid = 14,
   properties = {},
   tilesets = {
     {
@@ -92,12 +92,12 @@ return {
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
         1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 1, 1, 1, 1, 1, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 1, 1, 0, 0, 0, 0, 0, 0, 1,
         1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
         1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 1, 1, 1, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1
       }
     },
@@ -113,11 +113,11 @@ return {
       properties = {},
       objects = {
         {
-          id = 1,
+          id = 8,
           name = "",
           type = "",
           shape = "rectangle",
-          x = 256,
+          x = 32,
           y = 288,
           width = 32,
           height = 32,
@@ -127,16 +127,58 @@ return {
           properties = {}
         },
         {
-          id = 2,
+          id = 9,
           name = "",
           type = "",
           shape = "rectangle",
-          x = 32,
-          y = 288,
+          x = 160,
+          y = 96,
           width = 32,
           height = 32,
           rotation = 0,
           gid = 4,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 11,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 192,
+          y = 256,
+          width = 32,
+          height = 32,
+          rotation = 0,
+          gid = 6,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 12,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 224,
+          y = 256,
+          width = 32,
+          height = 32,
+          rotation = 0,
+          gid = 6,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 13,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 256,
+          y = 256,
+          width = 32,
+          height = 32,
+          rotation = 0,
+          gid = 6,
           visible = true,
           properties = {}
         }

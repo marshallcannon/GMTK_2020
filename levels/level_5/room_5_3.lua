@@ -9,7 +9,7 @@ return {
   tilewidth = 32,
   tileheight = 32,
   nextlayerid = 3,
-  nextobjectid = 3,
+  nextobjectid = 5,
   properties = {},
   tilesets = {
     {
@@ -90,14 +90,14 @@ return {
       encoding = "lua",
       data = {
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
         1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
         1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
         1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1
       }
     },
@@ -118,7 +118,7 @@ return {
           type = "",
           shape = "rectangle",
           x = 256,
-          y = 288,
+          y = 224,
           width = 32,
           height = 32,
           rotation = 0,
@@ -132,11 +132,39 @@ return {
           type = "",
           shape = "rectangle",
           x = 32,
-          y = 288,
+          y = 224,
           width = 32,
           height = 32,
           rotation = 0,
           gid = 4,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 3,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 192,
+          y = 224,
+          width = 32,
+          height = 32,
+          rotation = 0,
+          gid = 6,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 4,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 96,
+          y = 224,
+          width = 32,
+          height = 32,
+          rotation = 0,
+          gid = 6,
           visible = true,
           properties = {}
         }
