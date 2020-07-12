@@ -134,7 +134,7 @@ function Marine:shoot ()
   local y = self.y + self.hitbox.height / 2 - Bullet.hitbox.height
 
   local bullet = Bullet(self.room, x, y, direction)
-  self.room:addObject(bullet, false)
+  self.room:addObject(bullet)
 
   self.bullets = self.bullets - 1
 

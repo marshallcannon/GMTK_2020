@@ -6,6 +6,8 @@ local Marine = require 'gameObjects/marine'
 local Block = require 'gameObjects/block'
 local Battery = require 'gameObjects/battery'
 local Alien = require 'gameObjects/alien'
+local SpikesTop = require 'gameObjects/spikesTop'
+local SpikesBottom = require 'gameObjects/spikesBottom'
 
 local Room = Class {
   width = 320,
@@ -325,7 +327,7 @@ function Room:keyreleased (key)
 
 end
 
-function Room:addObject (object, adjustPosition)
+function Room:addObject (object, center, snapToGround)
 
   if adjustPosition == nil then
     adjustPosition = true
@@ -333,11 +335,13 @@ function Room:addObject (object, adjustPosition)
 
   table.insert(self.objects, object)
   if object.hitbox then
-    if adjustPosition then
-      -- Snap to ground
-      object.y = object.y + object.hitbox.y + (32 - (object.hitbox.y +  object.hitbox.height))
+    if center then
       -- Put in center
       object.x = object.x + object.hitbox.x
+    end
+    if snapToGround then
+      -- Snap to ground
+      object.y = object.y + object.hitbox.y + (32 - (object.hitbox.y +  object.hitbox.height))
     end
     -- Add to collisions
     self.bumpWorld:add(object, object.x, object.y,
@@ -384,14 +388,20 @@ function Room:buildRoom (roomMap)
     if object.gid == 2 then
       -- The marine needs to start in the center of its tile
       local marine = Marine(self, x, y)
-      self:addObject(marine)
+      self:addObject(marine, true, true)
       self.marine = marine
     elseif object.gid == 3 then
       local alien = Alien(self, x, y)
-      self:addObject(alien)
+      self:addObject(alien, true, true)
     elseif object.gid == 4 then
       local battery = Battery(self, x, y)
-      self:addObject(battery)
+      self:addObject(battery, true, true)
+    elseif object.gid == 5 then
+      local spikesTop = SpikesTop(self, x, y)
+      self:addObject(spikesTop, true)
+    elseif object.gid == 6 then
+      local spikesBottom = SpikesBottom(self, x, y)
+      self:addObject(spikesBottom, true, true)
     end
   end
 
