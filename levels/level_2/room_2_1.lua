@@ -32,7 +32,7 @@ return {
       },
       properties = {},
       terrains = {},
-      tilecount = 4,
+      tilecount = 7,
       tiles = {
         {
           id = 0,
@@ -55,6 +55,24 @@ return {
         {
           id = 3,
           image = "../../assets/images/battery.png",
+          width = 32,
+          height = 32
+        },
+        {
+          id = 4,
+          image = "../../assets/images/spikesTop.png",
+          width = 32,
+          height = 32
+        },
+        {
+          id = 5,
+          image = "../../assets/images/spikesBottom.png",
+          width = 32,
+          height = 32
+        },
+        {
+          id = 6,
+          image = "../../assets/images/glass.png",
           width = 32,
           height = 32
         }
@@ -83,7 +101,7 @@ return {
         1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
         1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
         1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 0, 0, 1, 1, 1, 1, 1, 1, 1,
         1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
         1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1

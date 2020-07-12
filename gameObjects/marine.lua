@@ -276,6 +276,14 @@ function Marine:grabBattery (battery)
   self.room:checkRunOver()
   Sounds.grab:play()
 
+  -- Particles
+    for i = 1, 30 do
+      local vx = math.random() * 200 - 100
+      local vy = math.random() * -150
+      local particle = Particle(self.room, battery.x + battery.hitbox.width / 2, battery.y + battery.hitbox.height - 5, 2, 2, vx, vy, {133/255, 193/255, 83/255}, 2)
+      self.room:addObject(particle)
+    end
+
 end
 
 return Marine
