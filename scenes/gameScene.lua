@@ -114,10 +114,14 @@ function GameScene:keypressed (key)
       self:zoomOut(0.5)
     end
     if key == 'space' then
-      if self.selectedRoom.status == 'unlocked' then
-        self:zoomToRoom(self.selectedRoom)
-        self.activeRoom = self.selectedRoom
-        self.activeRoom:startCountdown()
+      if self.nextLevelButton then
+        self:goToNextLevel()
+      else
+        if self.selectedRoom.status == 'unlocked' then
+          self:zoomToRoom(self.selectedRoom)
+          self.activeRoom = self.selectedRoom
+          self.activeRoom:startCountdown()
+        end
       end
     end
   end
