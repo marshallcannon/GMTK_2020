@@ -13,11 +13,18 @@ function GameScene:init (folderName)
 
   self.levelLayout = require('levels/' .. folderName .. '/layout')
   self.roomMaps = self:loadRoomMaps(folderName, self.levelLayout)
+  print('#roomMaps: ' .. #self.roomMaps)
   self.rooms, self.roomOrder = self:createRooms(self.levelLayout, self.roomMaps)
+  for y = 1, #self.rooms do
+    for x = 1, #self.rooms[y] do
+      print(self.rooms[y][x])
+    end
+  end
+  print(#self.roomOrder)
 
   self.selectedRoomRow = 1
   self.selectedRoomColumn = 1
-  self.selectedRoom = self.rooms[self.selectedRoomRow][self.selectedRoomColumn]
+  self.selectedRoom = self.roomOrder[1]
 
   self.timelineDisplay = TimelineDisplay(love.graphics.getWidth() / 2 - 500, love.graphics.getHeight() - 190)
 
@@ -70,15 +77,21 @@ function GameScene:draw ()
 
   self.camera:attach()
 
-  for y = 1, #self.rooms do
-    for x = 1, #self.rooms[y] do
-      local roomX = (x - 1) * self.roomWidth
-      local roomY = (y - 1) * self.roomHeight
-      love.graphics.translate(roomX, roomY)
-      self.rooms[y][x]:draw()
-      love.graphics.translate(-roomX, -roomY)
-    end
+  for i = 1, #self.roomOrder do
+    local room = self.roomOrder[i]
+    love.graphics.translate(room.x, room.y)
+    room:draw()
+    love.graphics.translate(-room.x, -room.y)
   end
+  -- for y = 1, #self.rooms do
+  --   for x = 1, #self.rooms[y] do
+  --     local roomX = (x - 1) * self.roomWidth
+  --     local roomY = (y - 1) * self.roomHeight
+  --     love.graphics.translate(roomX, roomY)
+  --     self.rooms[y][x]:draw()
+  --     love.graphics.translate(-roomX, -roomY)
+  --   end
+  -- end
 
   -- self:drawLockArrows()
 
@@ -165,8 +178,10 @@ function GameScene:loadRoomMaps (folderName, layout)
   local folderPath = 'levels/' .. folderName .. '/'
   for y = 1, #layout.rooms do
     for x = 1, #layout.rooms[y] do
-      local map = require(folderPath .. layout.rooms[y][x])
-      table.insert(roomMaps, map)
+      if type(layout.rooms[y][x]) == 'string' then
+        local map = require(folderPath .. layout.rooms[y][x])
+        table.insert(roomMaps, map)
+      end
     end
   end
 
@@ -186,26 +201,50 @@ function GameScene:createRooms (layout, roomMaps)
   for row = 1, #layout.rooms do
     rooms[row] = {}
     for column = 1, #layout.rooms[row] do
-      local newRoom = Room(self, roomMaps[roomCount], (column - 1) * self.roomWidth, (row - 1) * self.roomHeight, column, row)
-      rooms[row][column] = newRoom
-      sortedRooms[roomCount] = newRoom
-      roomCount = roomCount + 1
-      -- Custom backgrounds
-      if layout.backgrounds and layout.backgrounds[row] and layout.backgrounds[row][column] then
-        newRoom:setBackground(Images[layout.backgrounds[row][column]])
+      if type(layout.rooms[row][column]) == 'string' then
+        print('Room exists')
+        print(column, row)
+        local newRoom = Room(self, roomMaps[roomCount], (column - 1) * self.roomWidth, (row - 1) * self.roomHeight, column, row)
+        rooms[row][column] = newRoom
+        sortedRooms[roomCount] = newRoom
+        roomCount = roomCount + 1
+        -- Custom backgrounds
+        if layout.backgrounds and layout.backgrounds[row] and layout.backgrounds[row][column] then
+          newRoom:setBackground(Images[layout.backgrounds[row][column]])
+        end
+      else
+        print('Room does not exist')
+        print(column, row)
       end
     end
   end
 
+  print('Made ' .. roomCount - 1 .. ' rooms')
+
   assert(#sortedRooms == roomCount - 1, 'The room order got fucked up')
+
+  -- Assign room order
+  for y = 1, #layout.order do
+    for x = 1, #layout.order[y] do
+      if type(layout.order[y][x]) == 'number' then
+        rooms[y][x].roomIndex = layout.order[y][x]
+        print('Room index: ' .. rooms[y][x].roomIndex)
+      end
+    end
+  end
 
   -- Link rooms in order
   for i = 1, #sortedRooms do
-    if sortedRooms[i - 1] then
-      sortedRooms[i]:setPriorRoom(sortedRooms[i - 1])
+    local room = sortedRooms[i]
+    if room.roomIndex > 1 then
+      print('Assigning prior room for room index ' .. room.roomIndex)
+      local priorRoom = self:getRoomAtOrder(sortedRooms, room.roomIndex - 1)
+      assert(priorRoom, 'No prior room!')
+      room:setPriorRoom(priorRoom)
     end
-    if sortedRooms[i + 1] then
-      sortedRooms[i]:setNextRoom(sortedRooms[i + 1])
+    local nextRoom = self:getRoomAtOrder(sortedRooms, room.roomIndex + 1)
+    if nextRoom then
+      room:setNextRoom(nextRoom)
     end
   end
 
@@ -471,6 +510,14 @@ function GameScene:getRoomDirection (room1, room2)
     return 'up'
   elseif room2.y > room1.y then
     return 'down'
+  end
+
+end
+
+function GameScene:getRoomAtOrder (rooms, index)
+
+  for i = 1, #rooms do
+    if rooms[i].roomIndex == index then return rooms[i] end
   end
 
 end

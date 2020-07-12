@@ -48,7 +48,7 @@ end
 function LoadScene:loadingDone ()
 
   Game = {}
-  Game.levelIndex = 1
+  Game.levelIndex = 4
 
   SceneManager:remove(self)
   SceneManager:add(GameScenes.Game(LevelOrder[Game.levelIndex]))
