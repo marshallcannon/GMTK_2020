@@ -387,7 +387,7 @@ end
 
 function GameScene:hideTimeline ()
 
-  Timer.tween(0.5, self.timelineDisplay, { y = love.graphics.getHeight() }, 'out-quad')
+  Timer.tween(0.5, self.timelineDisplay, { y = love.graphics.getHeight() + 10 }, 'out-quad')
 
 end
 
