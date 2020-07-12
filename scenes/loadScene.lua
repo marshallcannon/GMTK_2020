@@ -42,6 +42,8 @@ function LoadScene:loadAll ()
   Fonts.extrude = love.graphics.newFont('assets/fonts/Extrude.ttf', 16, 'mono')
   Fonts.eightBit = love.graphics.newFont('assets/fonts/8-bit-hud.ttf', 12, 'mono')
   Fonts.verminVibes = love.graphics.newFont('assets/fonts/Vermin_Vibes_1989.ttf', 16, 'mono')
+  Fonts.verminVibesBig = love.graphics.newFont('assets/fonts/Vermin_Vibes_1989.ttf', 64, 'mono')
+  Fonts.verminVibesMedium = love.graphics.newFont('assets/fonts/Vermin_Vibes_1989.ttf', 32, 'mono')
 
   self:loadingDone()
 
@@ -50,7 +52,7 @@ end
 function LoadScene:loadingDone ()
 
   Game = {}
-  Game.levelIndex = 5
+  Game.levelIndex = 1
 
   SceneManager:remove(self)
   SceneManager:add(GameScenes.Game(LevelOrder[Game.levelIndex]))

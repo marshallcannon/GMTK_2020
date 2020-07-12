@@ -443,7 +443,11 @@ function GameScene:goToNextLevel ()
 
   Timer.after(0.5, function ()
     SceneManager:remove(self)
-    SceneManager:add(GameScenes.Game(LevelOrder[Game.levelIndex]), 1)
+    if LevelOrder[Game.levelIndex] then
+      SceneManager:add(GameScenes.Game(LevelOrder[Game.levelIndex]), 1)
+    else
+      SceneManager:add(GameScenes.Credits(), 1)
+    end
   end)
 
 end

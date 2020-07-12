@@ -12,6 +12,7 @@ function love.load ()
   GameScenes.Load = require 'scenes/loadScene'
   GameScenes.Game = require 'scenes/gameScene'
   GameScenes.Transition = require 'scenes/transitionScene'
+  GameScenes.Credits = require 'scenes/creditsScene'
 
   local load = GameScenes.Load()
   SceneManager:add(load)
