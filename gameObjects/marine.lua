@@ -1,5 +1,6 @@
 local Class = require 'libraries/class'
 local Bullet = require 'gameObjects/bullet'
+local Particle = require 'gameObjects/particle'
 
 local Marine = Class {
   hitbox = {
@@ -20,7 +21,7 @@ function Marine:init (room, x, y)
     y = 0
   }
 
-  self.onGround = false
+  self.onGround = true
   self.gravity = 800
   self.jumpPower = 400
   self.acceleration = 900
@@ -29,6 +30,10 @@ function Marine:init (room, x, y)
   self.maxSpeed = 120
   self.directionFacing = 'right'
   self.bullets = 3
+
+  -- Programmatic animations
+  self.vCompress = 1
+  self.hCompress = 1
 
 end
 
@@ -101,7 +106,8 @@ function Marine:draw ()
     scaleX = -1
     offsetX = 32
   end
-  love.graphics.draw(Images.marine, self.x - self.hitbox.x, self.y - self.hitbox.y, 0, scaleX, 1, offsetX)
+  love.graphics.draw(Images.marine, self.x - self.hitbox.x, self.y - self.hitbox.y, 0, scaleX * self.hCompress,
+    self.vCompress, offsetX, -(Images.marine:getHeight() - Images.marine:getHeight() * self.vCompress))
 
   -- Debugging
   -- local x, y, w, h = self.room.bumpWorld:getRect(self)
@@ -119,6 +125,22 @@ function Marine:jump ()
   if self.onGround then
     self.velocity.y = -self.jumpPower
     Sounds.jump:play()
+
+    -- Animation
+    self.vCompress = 0.8
+    self.hCompress = 1.2
+    Timer.tween(0.25, self, { vCompress = 1.2, hCompress = 0.8 }, 'linear', function ()
+      Timer.tween(0.25, self, {vCompress = 1, hCompress = 1 }, 'linear')
+    end)
+
+    -- Particles
+    for i = 1, 10 do
+      local vx = math.random() * 40 - 20
+      local vy = math.random() * -25
+      local particle = Particle(self.room, self.x + self.hitbox.width / 2, self.y + self.hitbox.height - 5, 2, 2, vx, vy, Colors.Shadow, 0.5)
+      self.room:addObject(particle)
+    end
+
   end
 
 end
@@ -181,6 +203,19 @@ function Marine:hitGround ()
     self.velocity.y = 0
   end
   self.onGround = true
+
+  -- Animation
+  Timer.tween(0.1, self, { vCompress = 0.8, hCompress = 1.2 }, 'linear', function ()
+    Timer.tween(0.1, self, { vCompress = 1, hCompress = 1 })
+  end)
+
+  -- Particles
+  for i = 1, 10 do
+    local vx = math.random() * 40 - 20
+    local vy = math.random() * -25
+    local particle = Particle(self.room, self.x + self.hitbox.width / 2, self.y + self.hitbox.height - 5, 2, 2, vx, vy, Colors.Shadow, 0.5)
+    self.room:addObject(particle)
+  end
 
 end
 

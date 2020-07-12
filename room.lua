@@ -234,20 +234,22 @@ function Room:draw (x, y)
       love.graphics.draw(self.countdownText, x, y)
     else
       if self.status == 'complete' then
-        -- Dark overlay
-        love.graphics.setColor(0, 0, 0, 0.5)
-        love.graphics.rectangle('fill', 0, 0, self.width, self.height)
-        -- Checkmark
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.draw(Images.roomComplete, self.width / 2, self.height / 2, 0, 1, 1,
-          Images.roomComplete:getWidth() / 2, Images.roomComplete:getHeight() / 2)
-        -- Reset timer indicator
-        if self.resetTimer == 0 then
-          love.graphics.setFont(Fonts.verminVibes)
-          love.graphics.print('\'r\' to reset', self.width / 2 - Fonts.verminVibes:getWidth('\'r\' to reset') / 2, self.height / 2 + 35)
-        else
-          local resetPercentage = self.resetTimer / self.resetMax
-          love.graphics.arc('fill', self.width / 2, self.height / 2 + 40, 15, -math.pi / 2, -math.pi / 2 + math.pi * 2 * resetPercentage)
+        if not self.scene.finalPlayback then
+          -- Dark overlay
+          love.graphics.setColor(0, 0, 0, 0.5)
+          love.graphics.rectangle('fill', 0, 0, self.width, self.height)
+          -- Checkmark
+          love.graphics.setColor(1, 1, 1)
+          love.graphics.draw(Images.roomComplete, self.width / 2, self.height / 2, 0, 1, 1,
+            Images.roomComplete:getWidth() / 2, Images.roomComplete:getHeight() / 2)
+          -- Reset timer indicator
+          if self.resetTimer == 0 then
+            love.graphics.setFont(Fonts.verminVibes)
+            love.graphics.print('\'r\' to reset', self.width / 2 - Fonts.verminVibes:getWidth('\'r\' to reset') / 2, self.height / 2 + 35)
+          else
+            local resetPercentage = self.resetTimer / self.resetMax
+            love.graphics.arc('fill', self.width / 2, self.height / 2 + 40, 15, -math.pi / 2, -math.pi / 2 + math.pi * 2 * resetPercentage)
+          end
         end
       else
         if self.status == 'locked' then
